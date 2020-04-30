@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "82964025610",
+    "firebase_url": "https://docbook-4110f.firebaseio.com",
+    "project_id": "docbook-4110f",
+    "storage_bucket": "docbook-4110f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:82964025610:android:cebd9138f59beb7ef62af3",
+        "android_client_info": {
+          "package_name": "com.nivid.DocBook"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "82964025610-jthimnfe30f2f8a52g551mqfsq9n5hk4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.nivid.DocBook",
+            "certificate_hash": "9a2032b10570581dffff0906ddd2e61bdbb57283"
+          }
+        },
+        {
+          "client_id": "82964025610-fc9f60i5g3gm2jfssk8q97s4o1kc248a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBA4szh6rtRvCgp1n5X4q_nNboHAuP1IKQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "82964025610-fc9f60i5g3gm2jfssk8q97s4o1kc248a.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

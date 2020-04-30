@@ -1,4 +1,4 @@
-package com.nivid.docbook
+package com.nivid.DocBook
 
 import io.flutter.embedding.android.FlutterActivity
 

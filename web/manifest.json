@@ -1,6 +1,6 @@
 {
-    "name": "docbook",
-    "short_name": "docbook",
+    "name": "DocBook",
+    "short_name": "DocBook",
     "start_url": ".",
     "display": "minimal-ui",
     "background_color": "#0175C2",

@@ -8,7 +8,7 @@ class Medicine{
   bool afternoon;
   bool night;
   int timePeriod;
-  DocumentReference medID;
+//  DocumentReference medID;
 
   Medicine(this.name,this.strength,this.amount,this.day,this.afternoon,this.night,this.timePeriod);
 

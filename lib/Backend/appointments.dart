@@ -5,12 +5,12 @@ class Appointments{
   DocumentReference apID;
   DateTime date;
   int time;
-  bool feeStatus;
+  bool completionStatus;
 
-  Appointments(this.sicknessDescription,this.date,this.time,{this.feeStatus=false});
+  Appointments(this.sicknessDescription,this.date,this.time,{this.completionStatus=false});
 
   List view(){
-    return [sicknessDescription,date,time,feeStatus];
+    return [sicknessDescription,date,time,completionStatus];
   }
 
   void reSchedule(DateTime date,int time){
@@ -18,8 +18,24 @@ class Appointments{
     this.time=time;
   }
 
-  void feeUpdate(){
-    feeStatus=true;
+  void statusUpdate(){
+    completionStatus=true;
   }
 
+  Appointments.fromSnapshot(DocumentSnapshot snapshot){
+    apID=snapshot.reference;
+    sicknessDescription=snapshot.data['sicknessDescription'];
+    date=snapshot.data['date'];
+    time=snapshot.data['time'];
+    completionStatus=snapshot.data['completionStatus'];
+  }
+
+  toJson(){
+    return{
+      'sicknessDescription':sicknessDescription,
+      'date':date,
+      'time':time,
+      'completionStatus':completionStatus
+    };
+  }
 }

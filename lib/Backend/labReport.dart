@@ -4,7 +4,7 @@ class LabReport{
   String testType;
   DateTime timeStamp;
   String reportURL;
-  DocumentReference repID;
+//  DocumentReference repID;
 
   LabReport(this.testType,this.timeStamp,this.reportURL);
 

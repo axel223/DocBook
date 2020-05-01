@@ -25,4 +25,27 @@ class Patient{
     this.dob=dob;
     this.bloodGroup=bloodGroup;
   }
+
+  Patient.fromSnapshot(DocumentSnapshot snapshot){
+    patientReference=snapshot.reference;
+    this.name=snapshot.data['name'];
+    this.address=snapshot.data['address'];
+    this.phone=snapshot.data['phone'];
+    this.email=snapshot.data['email'];
+    this.sex=snapshot.data['sex'];
+    this.dob=snapshot.data['dob'];
+    this.bloodGroup=snapshot.data['bloodGroup'];
+  }
+
+  toJson(){
+    return {
+      'name':name,
+      'address':address,
+      'phone':phone,
+      'email':email,
+      'sex':sex,
+      'dob':dob,
+      'bloodGroup':bloodGroup
+    };
+  }
 }

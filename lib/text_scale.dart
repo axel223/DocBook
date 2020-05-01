@@ -1,12 +1,6 @@
-// Copyright 2019 The Flutter team. All rights reserved.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
-
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-
-//import 'package:gallery/data/gallery_options.dart';
 
 double _textScaleFactor(BuildContext context) {
   return 1.0;

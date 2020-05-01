@@ -1,4 +1,3 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -26,6 +25,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return ApplyTextOptions(
       child: Scaffold(
+        backgroundColor: DocBookColors.primaryBackground,
         body: SafeArea(
           child: _MainView(
             usernameController: _usernameController,
@@ -59,6 +59,7 @@ class _MainView extends StatelessWidget {
     print(passwordController.text);
     print("login");
     /////////////////////////Firebase Function/////////////////////////////////////////////////////////////////////////////////////////////////////
+
     Navigator.of(context).pushNamed(DocBook.homeRoute);
   }
 
@@ -314,69 +315,69 @@ class _PasswordInput extends StatelessWidget {
   }
 }
 
-class _ThumbButton extends StatefulWidget {
-  _ThumbButton({
-    @required this.onTap,
-  });
-
-  final VoidCallback onTap;
-
-  @override
-  _ThumbButtonState createState() => _ThumbButtonState();
-}
-
-class _ThumbButtonState extends State<_ThumbButton> {
-  BoxDecoration borderDecoration;
-
-  @override
-  Widget build(BuildContext context) {
-    return Semantics(
-      button: true,
-      enabled: true,
-      label: 'Login',
-      child: GestureDetector(
-        onTap: widget.onTap,
-        child: Focus(
-          onKey: (node, event) {
-            if (event is RawKeyDownEvent) {
-              if (event.logicalKey == LogicalKeyboardKey.enter ||
-                  event.logicalKey == LogicalKeyboardKey.space) {
-                widget.onTap();
-                return true;
-              }
-            }
-            return false;
-          },
-          onFocusChange: (hasFocus) {
-            if (hasFocus) {
-              setState(() {
-                borderDecoration = BoxDecoration(
-                  border: Border.all(
-                    color: Colors.black.withOpacity(0.5),
-                    width: 2,
-                  ),
-                );
-              });
-            } else {
-              setState(() {
-                borderDecoration = null;
-              });
-            }
-          },
-          child: Container(
-            decoration: borderDecoration,
-            height: 120,
-            child: ExcludeSemantics(
-              child: Image.asset(
-                'icons/users.png',
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
+//class _ThumbButton extends StatefulWidget {
+//  _ThumbButton({
+//    @required this.onTap,
+//  });
+//
+//  final VoidCallback onTap;
+//
+//  @override
+//  _ThumbButtonState createState() => _ThumbButtonState();
+//}
+//
+//class _ThumbButtonState extends State<_ThumbButton> {
+//  BoxDecoration borderDecoration;
+//
+//  @override
+//  Widget build(BuildContext context) {
+//    return Semantics(
+//      button: true,
+//      enabled: true,
+//      label: 'Login',
+//      child: GestureDetector(
+//        onTap: widget.onTap,
+//        child: Focus(
+//          onKey: (node, event) {
+//            if (event is RawKeyDownEvent) {
+//              if (event.logicalKey == LogicalKeyboardKey.enter ||
+//                  event.logicalKey == LogicalKeyboardKey.space) {
+//                widget.onTap();
+//                return true;
+//              }
+//            }
+//            return false;
+//          },
+//          onFocusChange: (hasFocus) {
+//            if (hasFocus) {
+//              setState(() {
+//                borderDecoration = BoxDecoration(
+//                  border: Border.all(
+//                    color: Colors.black.withOpacity(0.5),
+//                    width: 2,
+//                  ),
+//                );
+//              });
+//            } else {
+//              setState(() {
+//                borderDecoration = null;
+//              });
+//            }
+//          },
+//          child: Container(
+//            decoration: borderDecoration,
+//            height: 120,
+//            child: ExcludeSemantics(
+//              child: Image.asset(
+//                'icons/users.png',
+//              ),
+//            ),
+//          ),
+//        ),
+//      ),
+//    );
+//  }
+//}
 
 //class _LoginButton extends StatelessWidget {
 //  const _LoginButton({

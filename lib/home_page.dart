@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:feather_icons_flutter/feather_icons_flutter.dart';
 
 import 'adaptive.dart';
 import 'text_scale.dart';
+
 //import 'package:gallery/studies/rally/tabs/accounts.dart';
 //import 'package:gallery/studies/rally/tabs/bills.dart';
 //import 'package:gallery/studies/rally/tabs/budgets.dart';
 //import 'package:gallery/studies/rally/tabs/overview.dart';
-//import 'package:gallery/studies/rally/tabs/settings.dart';
+import 'settings.dart';
+import 'patients.dart';
 
 const int tabCount = 5;
 const int turnsToRotateRight = 1;
@@ -155,39 +158,39 @@ class _HomePageState extends State<HomePage>
     return [
       _RallyTab(
         theme: theme,
-        iconData: Icons.pie_chart,
-        title: "Overview",
+        iconData: FeatherIcons.clock,
+        title: "Appointments",
         tabIndex: 0,
         tabController: _tabController,
         isVertical: isVertical,
       ),
       _RallyTab(
         theme: theme,
-        iconData: Icons.attach_money,
-        title: "Accounts",
+        iconData: FeatherIcons.users,
+        title: "Patients",
         tabIndex: 1,
         tabController: _tabController,
         isVertical: isVertical,
       ),
       _RallyTab(
         theme: theme,
-        iconData: Icons.money_off,
-        title: "Bills",
+        iconData: FeatherIcons.messageSquare,
+        title: "Chats",
         tabIndex: 2,
         tabController: _tabController,
         isVertical: isVertical,
       ),
       _RallyTab(
         theme: theme,
-        iconData: Icons.table_chart,
-        title: "Budgets",
+        iconData: FeatherIcons.calendar,
+        title: "Schedule",
         tabIndex: 3,
         tabController: _tabController,
         isVertical: isVertical,
       ),
       _RallyTab(
         theme: theme,
-        iconData: Icons.settings,
+        iconData: FeatherIcons.settings,
         title: "Settings",
         tabIndex: 4,
         tabController: _tabController,
@@ -202,14 +205,7 @@ class _HomePageState extends State<HomePage>
       width: 70,
       height: 70,
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
           color: Color(0xFFffffff),
-          boxShadow: [
-            BoxShadow(
-                color: Color(0xFF000000).withOpacity(.10),
-                offset: Offset(0.0, 0.0),
-                blurRadius: 10.0)
-          ]
       ),
       child: Icon(
         Icons.ac_unit,
@@ -217,18 +213,12 @@ class _HomePageState extends State<HomePage>
         color: Color(0xFF011399),
       ),
     ),
+      ListDemo(),
       Container(
         width: 70,
         height: 70,
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
             color: Color(0xFFffffff),
-            boxShadow: [
-              BoxShadow(
-                  color: Color(0xFF000000).withOpacity(.10),
-                  offset: Offset(0.0, 0.0),
-                  blurRadius: 10.0)
-            ]
         ),
         child: Icon(
           Icons.ac_unit,
@@ -240,14 +230,7 @@ class _HomePageState extends State<HomePage>
         width: 70,
         height: 70,
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
             color: Color(0xFFffffff),
-            boxShadow: [
-              BoxShadow(
-                  color: Color(0xFF000000).withOpacity(.10),
-                  offset: Offset(0.0, 0.0),
-                  blurRadius: 10.0)
-            ]
         ),
         child: Icon(
           Icons.ac_unit,
@@ -255,44 +238,7 @@ class _HomePageState extends State<HomePage>
           color: Color(0xFF011399),
         ),
       ),
-      Container(
-        width: 70,
-        height: 70,
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-            color: Color(0xFFffffff),
-            boxShadow: [
-              BoxShadow(
-                  color: Color(0xFF000000).withOpacity(.10),
-                  offset: Offset(0.0, 0.0),
-                  blurRadius: 10.0)
-            ]
-        ),
-        child: Icon(
-          Icons.ac_unit,
-          size: 36,
-          color: Color(0xFF011399),
-        ),
-      ),
-      Container(
-        width: 70,
-        height: 70,
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-            color: Colors.transparent,
-            boxShadow: [
-              BoxShadow(
-                  color: Color(0xFF000000).withOpacity(.10),
-                  offset: Offset(0.0, 0.0),
-                  blurRadius: 10.0)
-            ]
-        ),
-        child: Icon(
-          Icons.ac_unit,
-          size: 36,
-          color: Color(0xFF011399),
-        ),
-      ),
+      SettingsView(),
     ];
   }
 }
@@ -306,20 +252,25 @@ class _RallyTabBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FocusTraversalOrder(
-      order: const NumericFocusOrder(0),
-      child: TabBar(
-        // Setting isScrollable to true prevents the tabs from being
-        // wrapped in [Expanded] widgets, which allows for more
-        // flexible sizes and size animations among tabs.
-        isScrollable: true,
-        labelPadding: EdgeInsets.zero,
-        tabs: tabs,
-        controller: tabController,
-        // This hides the tab indicator.
-        indicatorColor: Colors.transparent,
-      ),
-    );
+    return
+      Container(
+//        padding: EdgeInsets.symmetric(vertical: 20),
+        child:FocusTraversalOrder(
+          order: const NumericFocusOrder(0),
+          child: TabBar(
+            // Setting isScrollable to true prevents the tabs from being
+            // wrapped in [Expanded] widgets, which allows for more
+            // flexible sizes and size animations among tabs.
+            isScrollable: true,
+            labelPadding: EdgeInsets.zero,
+            tabs: tabs,
+            controller: tabController,
+            // This hides the tab indicator.
+            indicatorColor: Colors.transparent,
+//            indicatorWeight: 3,
+          ),
+        )
+      );
   }
 }
 

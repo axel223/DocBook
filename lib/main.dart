@@ -21,10 +21,11 @@ class DocBook extends StatelessWidget {
     return MaterialApp(
       title: 'DocBook',
       debugShowCheckedModeBanner: false,
-//      theme: _buildDocBookTheme(),
-      theme: ThemeData(
-        primarySwatch: Colors.indigo,
-      ),
+      theme: _buildDocBookTheme(),
+//      theme: ThemeData(
+//        primarySwatch: Colors.indigo,
+//        backgroundColor: DocBookColors.buttonColor,
+//      ),
       initialRoute: loginRoute,
       routes: <String, WidgetBuilder>{
         homeRoute: (context) => const HomePage(),
@@ -36,13 +37,14 @@ class DocBook extends StatelessWidget {
   ThemeData _buildDocBookTheme() {
     final base = ThemeData.light();
     return ThemeData(
-      scaffoldBackgroundColor: DocBookColors.primaryBackground,
-      primaryColor: DocBookColors.primaryBackground,
+//      primarySwatch: Colors.indigo,
+      scaffoldBackgroundColor: DocBookColors.buttonColor,
+      primaryColor: DocBookColors.buttonColor,
       focusColor: DocBookColors.focusColor,
       textTheme: _buildDocBookTextTheme(base.textTheme),
       inputDecorationTheme: const InputDecorationTheme(
         labelStyle: TextStyle(
-          color: DocBookColors.gray,
+          color: DocBookColors.labelText,
           fontWeight: FontWeight.w500,
         ),
         filled: true,
@@ -65,8 +67,8 @@ class DocBook extends StatelessWidget {
         fontWeight: FontWeight.w400,
         letterSpacing: letterSpacingOrNone(1.4),
       ),
-      button: GoogleFonts.robotoCondensed(
-        fontWeight: FontWeight.w700,
+      button: GoogleFonts.poppins(
+        fontWeight: FontWeight.w500,
         letterSpacing: letterSpacingOrNone(2.8),
       ),
       headline5: GoogleFonts.eczar(

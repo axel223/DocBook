@@ -1,5 +1,6 @@
 import 'package:DocBook/Backend/inquiry.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:date_format/date_format.dart';
 
 class DoctorSchedule{
   List timeSlots;
@@ -26,9 +27,9 @@ class DoctorSchedule{
     timeSlots=snapshot.data['timeSlots'];
   }
 
-  toJson(){
+  Map toJson(){
     return{
-      'date':date,
+      'date':formatDate(date, [yyyy,'-',mm,'-',dd]),
       'timeSlots':timeSlots
     };
   }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+
 import 'adaptive.dart';
 class AppointmentPage extends StatefulWidget {
   @override
@@ -8,22 +9,34 @@ class AppointmentPage extends StatefulWidget {
 
 class _AppointmentPageState extends State<AppointmentPage> {
 
-  final color = Colors.cyan;
+  /////////////////////////inputs///////////////////////////////////////////////////////////
+  var startTime = DateTime.parse("1969-07-20 09:00:04Z");
+  var endTime = DateTime.parse("1969-07-20 21:00:04Z");
+  var appoint = [9,10,12,15];
+  var hourList = [1,2,3,4];
+  var userList = ['user1','user2','user3','user4'];
+  var slotList = ["9:00 - 10:00","10:00 - 12:00","12:00 - 3:00","3:00 - 7:00"];
+  var userAvatarList = [
+    Icon(Icons.person),
+    Icon(Icons.person),
+    Icon(Icons.person),
+    Icon(Icons.person),
+  ];
+  ////////////////////////////////////////////////////////////////////////////////////////
+
+  var list = [];
   Widget background(BuildContext context){
+    while(startTime.isBefore(endTime))
+    {
+      String time = "${startTime.hour}:${startTime.minute}";
+      list.add(time);
+      startTime = startTime.add(Duration(hours: 1));
+    }
     return Container(
       child: Column(children: <Widget>[
-        _TimeCard(string: "9:00 AM"),
-        _TimeCard(string: "9:00 AM"),
-        _TimeCard(string: "9:00 AM"),
-        _TimeCard(string: "9:00 AM"),
-        _TimeCard(string: "9:00 AM"),
-        _TimeCard(string: "9:00 AM"),
-        _TimeCard(string: "9:00 AM"),
-        _TimeCard(string: "9:00 AM"),
-        _TimeCard(string: "9:00 AM"),
-        _TimeCard(string: "9:00 AM"),
-        _TimeCard(string: "9:00 AM"),
-        _TimeCard(string: "9:00 AM"),
+        for (String title in list) ...[
+          _TimeCard(string:title,),
+        ]
       ],
       ),
     );
@@ -32,39 +45,41 @@ class _AppointmentPageState extends State<AppointmentPage> {
   @override
   Widget build(BuildContext context) {
     final isDesktop = isDisplayDesktop(context);
-    double desktopWidth =  MediaQuery.of(context).size.width - 150;
     int elements = 4;
-    var hour_list = [1,2,3,4];
+    double width =  (MediaQuery.of(context).size.width - 250)/elements;
+
+    var sumHour = [];
+    var tempSum = 0;
+
+    for(int i=0;i<elements;i++){
+      sumHour.add(tempSum);
+      tempSum = tempSum + hourList[i];
+    }
+
     return Container(
       color: Colors.white,
       child: !isDesktop ?
       Timeline(
         children: <Widget>[
-          _CardMobile(string: "9:00 - 10:00 AM", height: 50,),
-          _CardMobile(string: "10:00 - 12:00 AM", height: 100,),
-          _CardMobile(string: "12:00 - 3:00 AM", height: 150,),
-          _CardMobile(string: "3:00 - 7:00 AM", height: 200,),
+          for (int i=0;i<elements;i++) ...[
+            _CardMobile(string:slotList[i],height: hourList[i].toDouble() * 50,),
+          ]
         ],
-        indicators: <Widget>[
-          Icon(Icons.person),
-          Icon(Icons.person),
-          Icon(Icons.person),
-          Icon(Icons.person),
+        indicators: <Widget>[for (int i=0;i<elements;i++) ...[
+          userAvatarList[i],
+        ]
         ],
       )
           : SingleChildScrollView(
           child : Stack(children: <Widget>[
             background(context),
-            Positioned(
-              top: 33,
-              left: 80,
-              child:_CardDesktop(string: "hello",height: 64,width: desktopWidth/elements,),
-            ),
-            Positioned(
-              top: 33.0 + 64.0,
-              left: 80 + desktopWidth/elements,
-              child:_CardDesktop(string: "hello2",height:  64*elements.toDouble() ,width: desktopWidth/elements,),
-            ),
+            for(int i= 0 ; i < elements ;i++) ...[
+              _TopDesktop(string: userList[i],
+                top: 33 + 65 * sumHour[i],
+                left: 80 + width * i,
+                elements: elements,
+                hours: hourList[i].toDouble(),)
+              ],
 
             ],
           )
@@ -182,33 +197,24 @@ class _TopDesktop extends StatelessWidget {
   const _TopDesktop({
     Key key,
     @required this.string,
-    @required this.height,
-    @required this.width,
+    @required this.top,
+    @required this.left,
+    @required this.elements,
+    @required this.hours,
   }) : super(key: key);
 
   final String string;
-  final double height;
-  final double width;
-
+  final double top;
+  final double left;
+  final int elements;
+  final double hours;
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: height,
-      width: width,
-      alignment: Alignment.center,
-      padding: EdgeInsets.all(10),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(7),
-        color: Colors.amberAccent,
-      ),
-      child: Text(
-        string,
-        style: GoogleFonts.poppins(
-          fontWeight: FontWeight.w400,
-          fontSize: 10,
-          color: Colors.black,
-        ),
-      ),
+    double desktopWidth =  MediaQuery.of(context).size.width - 250;
+    return Positioned(
+      top: top,
+      left: left,
+      child:_CardDesktop(string: string,height:  65*hours ,width: desktopWidth/elements,),
     );
   }
 }

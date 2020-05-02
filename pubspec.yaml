@@ -34,6 +34,7 @@ dependencies:
   listview_utils: ^0.1.5
   dash_chat: ^1.1.2
   image_picker: ^0.6.5+3
+  jiffy: ^3.0.1
 
 dev_dependencies:
   flutter_test:

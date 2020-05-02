@@ -3,13 +3,10 @@ import 'package:feather_icons_flutter/feather_icons_flutter.dart';
 
 import 'adaptive.dart';
 import 'text_scale.dart';
-
-//import 'package:gallery/studies/rally/tabs/accounts.dart';
-//import 'package:gallery/studies/rally/tabs/bills.dart';
-//import 'package:gallery/studies/rally/tabs/budgets.dart';
-//import 'package:gallery/studies/rally/tabs/overview.dart';
 import 'settings.dart';
 import 'patients.dart';
+import 'appointments_page.dart';
+import 'chats.dart';
 
 const int tabCount = 5;
 const int turnsToRotateRight = 1;
@@ -201,24 +198,13 @@ class _HomePageState extends State<HomePage>
 
   List<Widget> _buildTabViews() {
     return [
-    Container(
-      width: 70,
-      height: 70,
-      decoration: BoxDecoration(
-          color: Color(0xFFffffff),
-      ),
-      child: Icon(
-        Icons.ac_unit,
-        size: 36,
-        color: Color(0xFF011399),
-      ),
-    ),
+    AppointmentPage(),
       ListDemo(),
       Container(
         width: 70,
         height: 70,
         decoration: BoxDecoration(
-            color: Color(0xFFffffff),
+          color: Color(0xFFffffff),
         ),
         child: Icon(
           Icons.ac_unit,

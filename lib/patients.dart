@@ -2,16 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'adaptive.dart';
 
-enum ListDemoType {
-  oneLine,
-  twoLine,
-}
 
 
 class ListDemo extends StatelessWidget {
-  const ListDemo({Key key, this.type}) : super(key: key);
-
-  final ListDemoType type;
+  const ListDemo({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

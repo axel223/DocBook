@@ -32,6 +32,8 @@ dependencies:
   google_fonts: ^1.0.0
   feather_icons_flutter: 4.7.4
   listview_utils: ^0.1.5
+  dash_chat: ^1.1.2
+  image_picker: ^0.6.5+3
 
 dev_dependencies:
   flutter_test:

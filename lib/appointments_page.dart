@@ -9,6 +9,7 @@ class AppointmentPage extends StatefulWidget {
 
 class _AppointmentPageState extends State<AppointmentPage> {
 
+  DateTime _dateTime = DateTime.now(); //date for which these inputs will be given
   /////////////////////////inputs///////////////////////////////////////////////////////////
   var startTime = DateTime.parse("1969-07-20 09:00:04Z");
   var endTime = DateTime.parse("1969-07-20 21:00:04Z");
@@ -41,13 +42,41 @@ class _AppointmentPageState extends State<AppointmentPage> {
       ),
     );
   }
+  
+  Widget date(BuildContext context){
+    return Container(
+      height: 30,
+      padding: EdgeInsets.all(5),
+      child: InkWell(
+            child: Text(
+              "${_dateTime.year.toString()}-${_dateTime.month.toString().padLeft(2,'0')}-${_dateTime.day.toString().padLeft(2,'0')}",
+              style: GoogleFonts.poppins(
+                fontSize: 15,
+                color: Colors.black,
+                fontWeight: FontWeight.w400,
+              ),
+            ),
+            onTap:(){
+              showDatePicker(context: context,
+                  initialDate: _dateTime == null ? DateTime.now() : _dateTime,
+                  firstDate: DateTime(2001),
+                  lastDate: DateTime(2021),
+              ).then((date) {
+                setState(() {
+                  if (date != null)
+                    _dateTime = date;
+                });
+              });
+            },
+          ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     final isDesktop = isDisplayDesktop(context);
     int elements = 4;
     double width =  (MediaQuery.of(context).size.width - 250)/elements;
-
     var sumHour = [];
     var tempSum = 0;
 
@@ -59,31 +88,46 @@ class _AppointmentPageState extends State<AppointmentPage> {
     return Container(
       color: Colors.white,
       child: !isDesktop ?
-      Timeline(
-        children: <Widget>[
-          for (int i=0;i<elements;i++) ...[
-            _CardMobile(string:slotList[i],height: hourList[i].toDouble() * 50,),
-          ]
-        ],
-        indicators: <Widget>[for (int i=0;i<elements;i++) ...[
-          userAvatarList[i],
-        ]
-        ],
-      )
-          : SingleChildScrollView(
-          child : Stack(children: <Widget>[
-            background(context),
-            for(int i= 0 ; i < elements ;i++) ...[
-              _TopDesktop(string: userList[i],
-                top: 33 + 65 * sumHour[i],
-                left: 80 + width * i,
-                elements: elements,
-                hours: hourList[i].toDouble(),)
-              ],
-
+         Column(
+           mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              date(context),
+              Timeline(
+                children: <Widget>[
+                  for (int i=0;i<elements;i++) ...[
+                    _CardMobile(string:slotList[i],height: hourList[i].toDouble() * 50,),
+                  ]
+                ],
+                indicators: <Widget>[for (int i=0;i<elements;i++) ...[
+                  userAvatarList[i],
+                ]
+                ],
+              )
             ],
-          )
-      )
+           )
+          : Container(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            date(context),
+            Expanded(
+              child: SingleChildScrollView(
+                  child : Stack(children: <Widget>[
+                    background(context),
+                    for(int i= 0 ; i < elements ;i++) ...[
+                      _TopDesktop(string: userList[i],
+                        top: 33 + 65 * sumHour[i],
+                        left: 80 + width * i,
+                        elements: elements,
+                        hours: hourList[i].toDouble(),)
+                    ],
+                  ],
+                  )
+              ),
+            )
+          ],
+        ),
+      ),
     );
   }
 }

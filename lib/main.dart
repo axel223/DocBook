@@ -63,7 +63,7 @@ class DocBook extends StatelessWidget {
         letterSpacing: letterSpacingOrNone(0.5),
       ),
       bodyText1: GoogleFonts.poppins(
-        fontSize: 40,
+        fontSize: 20,
         fontWeight: FontWeight.w400,
         letterSpacing: letterSpacingOrNone(1.4),
       ),
@@ -71,9 +71,9 @@ class DocBook extends StatelessWidget {
         fontWeight: FontWeight.w500,
         letterSpacing: letterSpacingOrNone(2.8),
       ),
-      headline5: GoogleFonts.eczar(
-        fontSize: 40,
-        fontWeight: FontWeight.w600,
+      headline5: GoogleFonts.poppins(
+        fontSize: 17,
+        fontWeight: FontWeight.w500,
         letterSpacing: letterSpacingOrNone(1.4),
       ),
     )

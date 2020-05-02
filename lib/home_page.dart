@@ -7,6 +7,7 @@ import 'settings.dart';
 import 'patients.dart';
 import 'appointments_page.dart';
 import 'chats.dart';
+import 'schedule.dart';
 
 const int tabCount = 5;
 const int turnsToRotateRight = 1;
@@ -198,7 +199,7 @@ class _HomePageState extends State<HomePage>
 
   List<Widget> _buildTabViews() {
     return [
-    AppointmentPage(),
+      AppointmentPage(),
       ListDemo(),
       Container(
         width: 70,
@@ -212,18 +213,7 @@ class _HomePageState extends State<HomePage>
           color: Color(0xFF011399),
         ),
       ),
-      Container(
-        width: 70,
-        height: 70,
-        decoration: BoxDecoration(
-            color: Color(0xFFffffff),
-        ),
-        child: Icon(
-          Icons.ac_unit,
-          size: 36,
-          color: Color(0xFF011399),
-        ),
-      ),
+      SchedulePage(),
       SettingsView(),
     ];
   }

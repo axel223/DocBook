@@ -7,6 +7,54 @@ class Patient extends StatelessWidget {
   Patient({this.patientId});
   final int patientId;
 
+  Future<String> _asyncInputDialog(BuildContext context) async {
+    String teamName = '';
+    return showDialog<String>(
+      context: context,
+//      barrierDismissible: false, // dialog is dismissible with a tap on the barrier
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Enter Details',style: GoogleFonts.poppins(color: Colors.black),),
+          content: Row(
+            children: <Widget>[
+              Expanded(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    TextField(
+                      autofocus: true,
+                      decoration: new InputDecoration(
+                          labelText: 'Medication', hintText: 'eg. Paracitamol'),
+                      onChanged: (value) {
+                        teamName = value;
+                      },
+                    ),
+                    TextField(
+                      autofocus: true,
+                      decoration: new InputDecoration(
+                          labelText: 'Daignosis', hintText: 'eg. Common Cold'),
+                      onChanged: (value) {
+                        teamName = value;
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('Ok'),
+              onPressed: () {
+                Navigator.of(context).pop(teamName);               ///////////////////////add prescription function///////////
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final isDesktop = isDisplayDesktop(context);
@@ -110,8 +158,7 @@ class Patient extends StatelessWidget {
           Expanded(
               child :ListView(
                 padding: const EdgeInsets.symmetric(vertical: 10,horizontal: 20),
-                children:
-                [
+                children: <Widget>[
                   for (int index = 1; index < 21; index++)
                     ListTile(
                       leading: ExcludeSemantics(
@@ -180,6 +227,12 @@ class Patient extends StatelessWidget {
               )
           ),
         ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        onPressed: (){
+          _asyncInputDialog(context);
+        },
       ),
     );
   }

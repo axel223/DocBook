@@ -89,23 +89,25 @@ class _AppointmentPageState extends State<AppointmentPage> {
     return Container(
       color: Colors.white,
       child: !isDesktop ?
-         Column(
-           mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              date(context),
-              Timeline(
-                children: <Widget>[
-                  for (int i=0;i<elements;i++) ...[
-                    _CardMobile(string:slotList[i],height: hourList[i].toDouble() * 50,),
-                  ]
-                ],
-                indicators: <Widget>[for (int i=0;i<elements;i++) ...[
-                  userAvatarList[i],
-                ]
-                ],
-              )
-            ],
-           )
+         SingleChildScrollView(
+             child : Column(
+               mainAxisAlignment: MainAxisAlignment.center,
+               children: <Widget>[
+                 date(context),
+                 Timeline(
+                   children: <Widget>[
+                     for (int i=0;i<elements;i++) ...[
+                       _CardMobile(string:slotList[i],height: hourList[i].toDouble() * 50,),
+                     ]
+                   ],
+                   indicators: <Widget>[for (int i=0;i<elements;i++) ...[
+                     userAvatarList[i],
+                   ]
+                   ],
+                 )
+               ],
+             )
+         )
           : Container(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

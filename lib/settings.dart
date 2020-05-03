@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import 'adaptive.dart';
 import 'main.dart';
-import 'colours.dart';
 
 class SettingsView extends StatefulWidget {
   @override

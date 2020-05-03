@@ -9,6 +9,7 @@ import 'adaptive.dart';
 import 'image_placeholder.dart';
 import 'text_scale.dart';
 import 'colours.dart';
+import 'alert.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage();
@@ -54,13 +55,56 @@ class _MainView extends StatelessWidget {
   final TextEditingController usernameController;
   final TextEditingController passwordController;
 
+  Future<void> _ackAlert(BuildContext context , String title,String text,String buttonText) {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(
+              title,
+              style: GoogleFonts.poppins(
+                  color: title == "Error" ? Colors.red : DocBookColors.buttonColor,
+                  fontSize: 20,
+                  fontWeight: FontWeight.w600,
+              )
+          ),
+          content: Text(
+              text,
+              style: GoogleFonts.poppins(
+                  color: DocBookColors.buttonColor,
+                  fontSize: 15
+              )
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: Text(buttonText),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   void _login(BuildContext context) {
+    bool loginKey = true;
+
     print(usernameController.text);
     print(passwordController.text);
     print("login");
     /////////////////////////Firebase Function/////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    Navigator.of(context).pushNamed(DocBook.homeRoute);
+//    if(usernameController.text == "Axel"){   ///////////////////demo function/////////////////
+//      loginKey = true;
+//    }
+    ////////////////////////////code for alert msg
+    if(!loginKey) {
+      _ackAlert(context, "Error", "Wrong Username or Password", "OK");
+    }
+    else {
+      Navigator.of(context).pushNamed(DocBook.homeRoute);
+    }
   }
 
 
@@ -257,10 +301,11 @@ class _UsernameInput extends StatelessWidget {
       child: Container(
         constraints: BoxConstraints(maxWidth: maxWidth ?? double.infinity),
         child: TextField(
+          style: TextStyle(color: Colors.black),
           controller: usernameController,
           decoration: InputDecoration(
             border: new OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
+              borderRadius: BorderRadius.circular(5),
               borderSide: BorderSide(
                 width: 0,
                 style: BorderStyle.none
@@ -293,11 +338,12 @@ class _PasswordInput extends StatelessWidget {
       child: Container(
         constraints: BoxConstraints(maxWidth: maxWidth ?? double.infinity),
         child: TextField(
+          style: TextStyle(color: Colors.black),
           controller: passwordController,
           decoration: InputDecoration(
             border: new OutlineInputBorder(
               borderRadius: const BorderRadius.all(
-                const Radius.circular(10.0),
+                const Radius.circular(5),
               ),
               borderSide: BorderSide(
                 width: 0,
@@ -314,97 +360,6 @@ class _PasswordInput extends StatelessWidget {
     );
   }
 }
-
-//class _ThumbButton extends StatefulWidget {
-//  _ThumbButton({
-//    @required this.onTap,
-//  });
-//
-//  final VoidCallback onTap;
-//
-//  @override
-//  _ThumbButtonState createState() => _ThumbButtonState();
-//}
-//
-//class _ThumbButtonState extends State<_ThumbButton> {
-//  BoxDecoration borderDecoration;
-//
-//  @override
-//  Widget build(BuildContext context) {
-//    return Semantics(
-//      button: true,
-//      enabled: true,
-//      label: 'Login',
-//      child: GestureDetector(
-//        onTap: widget.onTap,
-//        child: Focus(
-//          onKey: (node, event) {
-//            if (event is RawKeyDownEvent) {
-//              if (event.logicalKey == LogicalKeyboardKey.enter ||
-//                  event.logicalKey == LogicalKeyboardKey.space) {
-//                widget.onTap();
-//                return true;
-//              }
-//            }
-//            return false;
-//          },
-//          onFocusChange: (hasFocus) {
-//            if (hasFocus) {
-//              setState(() {
-//                borderDecoration = BoxDecoration(
-//                  border: Border.all(
-//                    color: Colors.black.withOpacity(0.5),
-//                    width: 2,
-//                  ),
-//                );
-//              });
-//            } else {
-//              setState(() {
-//                borderDecoration = null;
-//              });
-//            }
-//          },
-//          child: Container(
-//            decoration: borderDecoration,
-//            height: 120,
-//            child: ExcludeSemantics(
-//              child: Image.asset(
-//                'icons/users.png',
-//              ),
-//            ),
-//          ),
-//        ),
-//      ),
-//    );
-//  }
-//}
-
-//class _LoginButton extends StatelessWidget {
-//  const _LoginButton({
-//    Key key,
-//    @required this.onTap,
-//    this.maxWidth,
-//  }) : super(key: key);
-//
-//  final double maxWidth;
-//  final VoidCallback onTap;
-//
-//  @override
-//  Widget build(BuildContext context) {
-//    return Align(
-//      alignment: Alignment.center,
-//      child: Container(
-//        constraints: BoxConstraints(maxWidth: maxWidth ?? double.infinity),
-//        padding: const EdgeInsets.symmetric(vertical: 10),
-//        child: _FilledButton(
-//              text: 'LOGIN SECURELY',
-//              onTap: onTap,
-//              maxWidth: maxWidth,
-//            ),
-//      ),
-//    );
-//  }
-//}
 
 class _TapText extends StatelessWidget {
   const _TapText({Key key, @required this.text}) : super(key: key);
@@ -446,7 +401,6 @@ class _LoginButton extends StatelessWidget {
       alignment: Alignment.center,
       child: Container(
         constraints: BoxConstraints(minWidth: maxWidth ?? double.infinity,maxHeight: 60, minHeight: 60),
-//        color: Colors.black,
         child:FlatButton(
           color: DocBookColors.buttonColor,
           shape: RoundedRectangleBorder(

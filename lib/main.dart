@@ -22,10 +22,6 @@ class DocBook extends StatelessWidget {
       title: 'DocBook',
       debugShowCheckedModeBanner: false,
       theme: _buildDocBookTheme(),
-//      theme: ThemeData(
-//        primarySwatch: Colors.indigo,
-//        backgroundColor: DocBookColors.buttonColor,
-//      ),
       initialRoute: loginRoute,
       routes: <String, WidgetBuilder>{
         homeRoute: (context) => const HomePage(),
@@ -37,7 +33,7 @@ class DocBook extends StatelessWidget {
   ThemeData _buildDocBookTheme() {
     final base = ThemeData.light();
     return ThemeData(
-//      primarySwatch: Colors.indigo,
+      primarySwatch: Colors.indigo,
       scaffoldBackgroundColor: DocBookColors.buttonColor,
       primaryColor: DocBookColors.buttonColor,
       focusColor: DocBookColors.focusColor,
@@ -79,7 +75,7 @@ class DocBook extends StatelessWidget {
     )
         .apply(
       displayColor: Colors.white,
-      bodyColor: Colors.white,
+      bodyColor: Colors.white,              // label colour in body colour
     );
   }
 }

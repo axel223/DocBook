@@ -13,8 +13,9 @@ class _AppointmentPageState extends State<AppointmentPage> {
   /////////////////////////inputs///////////////////////////////////////////////////////////
   var startTime = DateTime.parse("1969-07-20 09:00:04Z");
   var endTime = DateTime.parse("1969-07-20 21:00:04Z");
-  var appoint = [9,10,12,15];
-  var hourList = [1,2,3,4];
+  var startTimeHour = 9;
+  var appoint = [9,9,12,15];
+  var hourList = [1,3,3,4];
   var userList = ['user1','user2','user3','user4'];
   var slotList = ["9:00 - 10:00","10:00 - 12:00","12:00 - 3:00","3:00 - 7:00"];
   var userAvatarList = [
@@ -116,7 +117,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
                     background(context),
                     for(int i= 0 ; i < elements ;i++) ...[
                       _TopDesktop(string: userList[i],
-                        top: 33 + 65 * sumHour[i],
+                        top: 33 + 65 * (appoint[i].toDouble() - startTimeHour),
                         left: 80 + width * i,
                         elements: elements,
                         hours: hourList[i].toDouble(),)

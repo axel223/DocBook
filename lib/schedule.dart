@@ -6,12 +6,39 @@ class SchedulePage extends StatefulWidget {
   @override
   _SchedulePageState createState() => _SchedulePageState();
 }
+
+enum Departments { Production, Research, Purchasing, Marketing, Accounting }
+
 class _SchedulePageState extends State<SchedulePage>{
 
   final int noOfElements = 25;
   DateTime _dateTime ;
-  @override
 
+Future<Departments> _asyncSimpleDialog(BuildContext context) async {
+  return await showDialog<Departments>(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return SimpleDialog(
+          children: <Widget>[
+            SimpleDialogOption(
+              onPressed: () {
+                Navigator.pop(context, Departments.Production);
+              },
+              child: Text('Reshedule' , style: GoogleFonts.poppins(color: Colors.black),),
+            ),
+            SimpleDialogOption(
+              onPressed: () {
+                Navigator.pop(context, Departments.Research);
+              },
+              child: Text('Cancel Schedule',style: GoogleFonts.poppins(color: Colors.black),),
+            ),
+          ],
+        );
+      });
+}
+
+  @override
   Widget build(BuildContext context) {
     final isDesktop = isDisplayDesktop(context);
     return Scaffold(
@@ -62,7 +89,7 @@ class _SchedulePageState extends State<SchedulePage>{
                   child: IconButton(
                     icon : Icon(Icons.event_busy),
                     onPressed: (){
-                        print("cancsiiil   " + index.toString());
+                        print("cancsiiil " + index.toString());
                     },
                   ),
                 ),
@@ -71,7 +98,12 @@ class _SchedulePageState extends State<SchedulePage>{
             ) :
             Container(
               padding: EdgeInsets.symmetric( horizontal: 20),
-              child: Icon(Icons.more_horiz),
+              child: IconButton(
+                  icon : Icon(Icons.more_horiz),
+                  onPressed: (){
+                    _asyncSimpleDialog(context);
+                  },
+              ),
             ),
           ),
         ],

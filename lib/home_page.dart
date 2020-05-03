@@ -200,19 +200,8 @@ class _HomePageState extends State<HomePage>
   List<Widget> _buildTabViews() {
     return [
       AppointmentPage(),
-      ListDemo(),
-      Container(
-        width: 70,
-        height: 70,
-        decoration: BoxDecoration(
-          color: Color(0xFFffffff),
-        ),
-        child: Icon(
-          Icons.ac_unit,
-          size: 36,
-          color: Color(0xFF011399),
-        ),
-      ),
+      PatientView(),
+      RecentChats(),
       SchedulePage(),
       SettingsView(),
     ];

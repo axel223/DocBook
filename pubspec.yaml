@@ -40,6 +40,13 @@ dependencies:
   meta: ^1.1.8
   mock_cloud_firestore: ^0.0.20
   date_format: ^1.0.8
+  flutter_svg: ^0.17.1
+  google_fonts: ^1.0.0
+  feather_icons_flutter: 4.7.4
+  listview_utils: ^0.1.5
+  dash_chat: ^1.1.2
+  image_picker: ^0.6.5+3
+  jiffy: ^3.0.1
 
 
 dev_dependencies:
@@ -51,6 +58,8 @@ dev_dependencies:
 
 # The following section is specific to Flutter.
 flutter:
+  assets:
+    - assets/icons/
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
@@ -73,6 +82,10 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
+  fonts:
+    - family: Home
+      fonts:
+        - asset: assets/icons/Home.ttf
   # fonts:
   #   - family: Schyler
   #     fonts:

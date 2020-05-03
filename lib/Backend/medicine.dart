@@ -1,5 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-
 class Medicine{
   String name;
   String strength;
@@ -8,16 +6,14 @@ class Medicine{
   bool afternoon;
   bool night;
   int timePeriod;
-  DocumentReference medID;
 
   Medicine(this.name,this.strength,this.amount,this.day,this.afternoon,this.night,this.timePeriod);
 
-  List view(){
-    return [name,strength,amount,day,afternoon,night,timePeriod];
-  }
+//  List view(){
+//    return [name,strength,amount,day,afternoon,night,timePeriod];
+//  }
 
-  Medicine.fromSnapshot(DocumentSnapshot snapshot){
-    medID=snapshot.reference;
+  Medicine.fromSnapshot(Map snapshot){
     name=snapshot['name'];
     strength=snapshot['strength'];
     amount=snapshot['amount'];

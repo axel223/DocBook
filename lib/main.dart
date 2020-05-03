@@ -1,86 +1,81 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter/foundation.dart';
 
-void main() => runApp(MyApp());
+import 'Web/login_page.dart';
+import 'Web/colours.dart';
+import 'Web/home_page.dart';
 
-class MyApp extends StatelessWidget {
+double letterSpacingOrNone(double letterSpacing) => kIsWeb ? 0.0 : letterSpacing;
+
+void main() => runApp(const DocBook());
+
+class DocBook extends StatelessWidget {
+  const DocBook();
+
+  static const String loginRoute = '/login';
+  static const String homeRoute = '/';
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Baby Names',
-      home: MyHomePage(),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  @override
-  _MyHomePageState createState() {
-    return _MyHomePageState();
-  }
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('Baby Name Votes')),
-      body: _buildBody(context),
-    );
-  }
-
-  Widget _buildBody(BuildContext context) {
-    return StreamBuilder<QuerySnapshot>(
-      stream: Firestore.instance.collection('baby').snapshots(),
-      builder: (context, snapshot) {
-        if (!snapshot.hasData) return LinearProgressIndicator();
-
-        return _buildList(context, snapshot.data.documents);
+      title: 'DocBook',
+      debugShowCheckedModeBanner: false,
+      theme: _buildDocBookTheme(),
+      initialRoute: loginRoute,
+      routes: <String, WidgetBuilder>{
+        homeRoute: (context) => const HomePage(),
+        loginRoute: (context) => const LoginPage(),
       },
     );
   }
 
-  Widget _buildList(BuildContext context, List<DocumentSnapshot> snapshot) {
-    return ListView(
-      padding: const EdgeInsets.only(top: 20.0),
-      children: snapshot.map((data) => _buildListItem(context, data)).toList(),
-    );
-  }
-
-  Widget _buildListItem(BuildContext context, DocumentSnapshot data) {
-    final record = Record.fromSnapshot(data);
-
-    return Padding(
-      key: ValueKey(record.name),
-      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-      child: Container(
-        decoration: BoxDecoration(
-          border: Border.all(color: Colors.grey),
-          borderRadius: BorderRadius.circular(5.0),
+  ThemeData _buildDocBookTheme() {
+    final base = ThemeData.light();
+    return ThemeData(
+      primarySwatch: Colors.indigo,
+      scaffoldBackgroundColor: DocBookColors.buttonColor,
+      primaryColor: DocBookColors.buttonColor,
+      focusColor: DocBookColors.focusColor,
+      textTheme: _buildDocBookTextTheme(base.textTheme),
+      inputDecorationTheme: const InputDecorationTheme(
+        labelStyle: TextStyle(
+          color: DocBookColors.labelText,
+          fontWeight: FontWeight.w500,
         ),
-        child: ListTile(
-          title: Text(record.name),
-          trailing: Text(record.votes.toString()),
-          onTap: () => record.reference.updateData({'votes': FieldValue.increment(1)}),       ),
+        filled: true,
+        fillColor: DocBookColors.inputBackground,
+        focusedBorder: InputBorder.none,
       ),
     );
   }
-}
 
-class Record {
-  final String name;
-  final int votes;
-  final DocumentReference reference;
-
-  Record.fromMap(Map<String, dynamic> map, {this.reference})
-      : assert(map['name'] != null),
-        assert(map['votes'] != null),
-        name = map['name'],
-        votes = map['votes'];
-
-  Record.fromSnapshot(DocumentSnapshot snapshot)
-      : this.fromMap(snapshot.data, reference: snapshot.reference);
-
-  @override
-  String toString() => "Record<$name:$votes>";
+  TextTheme _buildDocBookTextTheme(TextTheme base) {
+    return base
+        .copyWith(
+      bodyText2: GoogleFonts.robotoCondensed(
+        fontSize: 14,
+        fontWeight: FontWeight.w400,
+        letterSpacing: letterSpacingOrNone(0.5),
+      ),
+      bodyText1: GoogleFonts.poppins(
+        fontSize: 20,
+        fontWeight: FontWeight.w400,
+        letterSpacing: letterSpacingOrNone(1.4),
+      ),
+      button: GoogleFonts.poppins(
+        fontWeight: FontWeight.w500,
+        letterSpacing: letterSpacingOrNone(2.8),
+      ),
+      headline5: GoogleFonts.poppins(
+        fontSize: 17,
+        fontWeight: FontWeight.w500,
+        letterSpacing: letterSpacingOrNone(1.4),
+      ),
+    )
+        .apply(
+      displayColor: Colors.white,
+      bodyColor: Colors.white,              // label colour in body colour
+    );
+  }
 }

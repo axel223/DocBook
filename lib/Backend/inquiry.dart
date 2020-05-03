@@ -1,25 +1,25 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Inquiry{
-  DocumentReference inqID;
+  DocumentReference inqReference;
   String subject;
-  DateTime timeStamp;
+  String timeStamp; //primary Key
   int priority;
   String description;
   String solution;
 
   Inquiry(this.subject,this.timeStamp,this.priority,this.description,{this.solution});
 
-  List view(){
-    return [subject,timeStamp,priority,description,solution];
-  }
+//  List view(){
+//    return [subject,timeStamp,priority,description,solution];
+//  }
 
   void provideSolution(String solution){
     this.solution=solution;
   }
 
   Inquiry.fromSnapshot(DocumentSnapshot snapshot){
-    inqID=snapshot.reference;
+    inqReference=snapshot.reference;
     subject=snapshot.data['subject'];
     timeStamp=snapshot.data['timeStamp'];
     priority=snapshot.data['priority'];

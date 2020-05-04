@@ -1,3 +1,4 @@
+import 'package:DocBook/Backend/patient.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -31,7 +32,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Widget _buildBody(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-      stream: Firestore.instance.collection('baby').snapshots(),
+      stream: Firestore.instance.collection('Patient').snapshots(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) return LinearProgressIndicator();
 
@@ -48,7 +49,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Widget _buildListItem(BuildContext context, DocumentSnapshot data) {
-    final record = Record.fromSnapshot(data);
+    final record = Patient.fromSnapshot(data);
 
     return Padding(
       key: ValueKey(record.name),
@@ -60,8 +61,9 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
         child: ListTile(
           title: Text(record.name),
-          trailing: Text(record.votes.toString()),
-          onTap: () => record.reference.updateData({'votes': FieldValue.increment(1)}),       ),
+          trailing: Text(record.email),
+        ),
+//          onTap: () => record.patientReference.updateData({'votes': FieldValue.increment(1)}),       ),
       ),
     );
   }

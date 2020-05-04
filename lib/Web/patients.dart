@@ -1,11 +1,10 @@
-import 'package:DocBook/Backend/firestoreService.dart';
 import 'package:DocBook/Backend/patient.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:DocBook/Web/settings.dart';
+import 'package:progress_indicators/progress_indicators.dart';
 import 'adaptive.dart';
 import 'patient.dart';
-import 'package:DocBook/Backend/services.dart';
 
 class PatientView extends StatefulWidget {
   @override
@@ -14,9 +13,88 @@ class PatientView extends StatefulWidget {
 
 class _PatientViewState extends State<PatientView> {
 
-  Future<List<Patient>> _getList() async{
-    var list = await new Services().searchPatient(null);
-    return list;
+
+
+  Widget _buildBody(BuildContext context) {
+    return StreamBuilder<QuerySnapshot>(
+      stream: Firestore.instance.collection('Patient').snapshots(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) return JumpingDotsProgressIndicator(fontSize: 60.0,);
+
+        return _buildList(context, snapshot.data.documents);
+      },
+    );
+  }
+
+  Widget _buildList(BuildContext context, List<DocumentSnapshot> snapshot) {
+    return ListView(
+      padding: EdgeInsets.all(4.0),
+      children: snapshot.map((data) => _buildListItem(context, data)).toList(),
+    );
+  }
+
+  Widget _buildListItem(BuildContext context, DocumentSnapshot data) {
+    final isDesktop = isDisplayDesktop(context);
+    final P = Patient.fromSnapshot(data);
+
+    return Padding(
+        key: ValueKey(P.name),
+        padding: EdgeInsets.all(4.0),
+      child:ListTile(
+          leading: ExcludeSemantics(
+            child: CircleAvatar(radius: 30, child: Text(
+                P.name.substring(0, 0))),
+          ),
+          onTap: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => PatientUI(P.email))
+            );
+          },
+          title: Text(P.name, style: GoogleFonts.poppins(
+            fontSize: 15,
+            fontWeight: FontWeight.w500,
+            color: Colors.black,
+          )),
+          subtitle: Text(P.email, style: GoogleFonts.poppins(
+            fontSize: 13,
+            fontWeight: FontWeight.w300,
+            color: Colors.black,
+          )),
+          trailing: isDesktop ? Wrap(
+            spacing: 12, // space between two icons
+            children: <Widget>[
+              Container(
+                width: 150,
+                alignment: Alignment.centerLeft,
+                child: Text(
+                    P.bloodGroup,
+                    style: GoogleFonts.poppins(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.black,
+                    )
+                ),
+              ),
+              SizedBox(width: 100,),
+              Container(
+                width: 100,
+                alignment: Alignment.centerLeft,
+                child: Text(
+                    P.dob,
+                    style: GoogleFonts.poppins(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.black,
+                    )
+                ),
+              ),
+              SizedBox(width: 100,),
+            ],
+          ) : null,
+        ),
+    );
   }
 
   @override
@@ -24,10 +102,7 @@ class _PatientViewState extends State<PatientView> {
     final isDesktop = isDisplayDesktop(context);
     return Scaffold(
       backgroundColor: Colors.white,
-      body: FutureBuilder<List<Patient>>(
-        future: _getList(),
-        builder: (context, patientList) {
-          return Column(
+      body:  Column(
             children: <Widget>[
               isDesktop ? Container(
                 height: 70,
@@ -87,73 +162,10 @@ class _PatientViewState extends State<PatientView> {
                 ),
               ) : SizedBox(height: 0,),
               Expanded(
-                  child: ListView(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 10, horizontal: 20),
-                    children:
-                    [
-                      for (Patient P in patientList.data)
-                        ListTile(
-                          leading: ExcludeSemantics(
-                            child: CircleAvatar(radius: 30, child: Text(
-                                P.name.substring(0, 0))),
-                          ),
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => PatientUI(P.email))
-                            );
-                          },
-                          title: Text(P.name, style: GoogleFonts.poppins(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w500,
-                            color: Colors.black,
-                          )),
-                          subtitle: Text(P.email, style: GoogleFonts.poppins(
-                            fontSize: 13,
-                            fontWeight: FontWeight.w300,
-                            color: Colors.black,
-                          )),
-                          trailing: isDesktop ? Wrap(
-                            spacing: 12, // space between two icons
-                            children: <Widget>[
-                              Container(
-                                width: 150,
-                                alignment: Alignment.centerLeft,
-                                child: Text(
-                                    P.bloodGroup,
-                                    style: GoogleFonts.poppins(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.w500,
-                                      color: Colors.black,
-                                    )
-                                ),
-                              ),
-                              SizedBox(width: 100,),
-                              Container(
-                                width: 100,
-                                alignment: Alignment.centerLeft,
-                                child: Text(
-                                    P.dob,
-                                    style: GoogleFonts.poppins(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.w500,
-                                      color: Colors.black,
-                                    )
-                                ),
-                              ),
-                              SizedBox(width: 100,),
-                            ],
-                          ) : null,
-                        ),
-                    ],
-                  )
+                  child: _buildBody(context)
               ),
             ],
-          );
-        },
-      ),
+          ),
     );
   }
 }

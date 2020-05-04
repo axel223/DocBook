@@ -47,6 +47,7 @@ dependencies:
   dash_chat: ^1.1.2
   image_picker: ^0.6.5+3
   jiffy: ^3.0.1
+  progress_indicators: ^0.1.5
 
 
 dev_dependencies:

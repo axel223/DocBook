@@ -17,7 +17,7 @@ class Services {
 
   Future searchPatient(String name) async {
     if (name == null || name.isEmpty) {
-      return await new FirestoreService().readData('Patient');
+      return new FirestoreService().readData('Patient');
     }
     final CollectionReference _db = Firestore.instance.collection('Patient');
     var _documentList = await _db.getDocuments();

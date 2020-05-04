@@ -69,7 +69,7 @@ class _PatientViewState extends State<PatientView> {
                 width: 150,
                 alignment: Alignment.centerLeft,
                 child: Text(
-                    P.bloodGroup,
+                    P.address,
                     style: GoogleFonts.poppins(
                       fontSize: 15,
                       fontWeight: FontWeight.w500,
@@ -136,7 +136,7 @@ class _PatientViewState extends State<PatientView> {
                         padding: EdgeInsets.all(4.0),
                         width: 150.0,
                         child: Text(
-                          "Diagnosis",
+                          "Address",
                           style: GoogleFonts.poppins(
                             color: Color(0xFF010E74),
                             fontSize: 17,
@@ -149,7 +149,7 @@ class _PatientViewState extends State<PatientView> {
                         padding: EdgeInsets.all(4.0),
                         width: 130.0,
                         child: Text(
-                          "Date Visited",
+                          "Date of Birth",
                           style: GoogleFonts.poppins(
                             color: Color(0xFF010E74),
                             fontSize: 17,

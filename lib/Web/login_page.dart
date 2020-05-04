@@ -89,37 +89,44 @@ class _MainView extends StatelessWidget {
       },
     );
   }
-  void _handlesignIn(String email, String pass) async {
-    final FirebaseAuth _auth = FirebaseAuth.instance;
-    final FirebaseUser user = ( await _auth.signInWithEmailAndPassword(email: email, password: pass)).user;
-    if(user != null){
-      _loginKey=true;
+  Future _handlesignIn(String email, String pass) async {
+    try {
+      final FirebaseAuth _auth = FirebaseAuth.instance;
+      final FirebaseUser user = (await _auth.signInWithEmailAndPassword(
+          email: email, password: pass)).user;
+      if (user != null) {
+        return true;
+      }
+      else {
+        return false;
+      }
     }
-    else{
-      _loginKey=false;
+    catch(e){
+      return e.toString();
     }
   }
 
-  void _login(BuildContext context) async {
-//    bool loginKey = true;
+
+  Future _login(BuildContext context) async {
 
     print(usernameController.text);
     print(passwordController.text);
     print("login");
     /////////////////////////Firebase Function/////////////////////////////////////////////////////////////////////////////////////////////////////
-//    if(usernameController.text == "Axel"){   ///////////////////demo function/////////////////
-//      loginKey = true;
-//    }
-    ////////////////////////////code for alert msg
 
-    _handlesignIn(usernameController.text, passwordController.text);
 
-    if(!_loginKey) {
-      _ackAlert(context, "Error", "Wrong Username or Password", "OK");
+    var s=await _handlesignIn(usernameController.text, passwordController.text);
+
+    if(s is String){
+      _ackAlert(context, "Firebase Error", s, "OK");
     }
-    else {
+    else if(s==true) {
       Navigator.of(context).pushNamed(DocBook.homeRoute);
     }
+    else {
+      _ackAlert(context, "Error", "Wrong Username or Password", "OK");
+    }
+
   }
 
 
@@ -155,7 +162,7 @@ class _MainView extends StatelessWidget {
         _LoginButton(
           text: "LOGIN SECURELY",
           maxWidth: desktopMaxWidth,
-          onTap: () {
+          onTap: ()  {
             _login(context);
           },
         ),
@@ -184,7 +191,7 @@ class _MainView extends StatelessWidget {
         const SizedBox(height: 5),
         _LoginButton(
           text: "LOGIN",
-          onTap: () {
+          onTap: ()  {
             _login(context);
           },
         ),

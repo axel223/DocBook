@@ -3,9 +3,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'adaptive.dart';
 
 
-class Patient extends StatelessWidget {
-  Patient({this.patientId});
-  final int patientId;
+class PatientUI extends StatelessWidget {
+  PatientUI(this.patientId);
+  final String patientId;
 
   Future<String> _asyncInputDialog(BuildContext context) async {
     String teamName = '';

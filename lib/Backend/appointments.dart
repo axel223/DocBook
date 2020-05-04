@@ -7,8 +7,9 @@ class Appointments{
   String date;
   int time;
   bool completionStatus;
+  String patientEmail;
 
-  Appointments(this.sicknessDescription,this.date,this.time,this.bookTime,{this.completionStatus=false});
+  Appointments(this.sicknessDescription,this.date,this.time,this.bookTime,this.patientEmail,{this.completionStatus=false});
 
 //  List view(){
 //    return [sicknessDescription,date,time,completionStatus];
@@ -29,6 +30,7 @@ class Appointments{
     date=snapshot.data['date'];
     time=snapshot.data['time'];
     completionStatus=snapshot.data['completionStatus'];
+    patientEmail=snapshot.data['patientEmail'];
   }
 
   toJson(){
@@ -36,7 +38,8 @@ class Appointments{
       'sicknessDescription':sicknessDescription,
       'date':date,
       'time':time,
-      'completionStatus':completionStatus
+      'completionStatus':completionStatus,
+      'patientEmail':patientEmail
     };
   }
 }

@@ -7,8 +7,9 @@ class Inquiry{
   int priority;
   String description;
   String solution;
+  String patientEmail;
 
-  Inquiry(this.subject,this.timeStamp,this.priority,this.description,{this.solution});
+  Inquiry(this.subject,this.timeStamp,this.priority,this.description,this.patientEmail,{this.solution});
 
 //  List view(){
 //    return [subject,timeStamp,priority,description,solution];
@@ -25,6 +26,7 @@ class Inquiry{
     priority=snapshot.data['priority'];
     description=snapshot.data['description'];
     solution=snapshot.data['solution'];
+    patientEmail=snapshot.data['patientEmail'];
   }
 
   toJson(){
@@ -33,7 +35,8 @@ class Inquiry{
       'timeStamp':timeStamp,
       'priority':priority,
       'description':description,
-      'solution':solution
+      'solution':solution,
+      'patientEmail':patientEmail
     };
   }
 }

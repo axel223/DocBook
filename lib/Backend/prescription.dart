@@ -13,8 +13,9 @@ class Prescription{
   String suggestedTest;
   List medicines;
   List reports;
+  String patientEmail;
 
-  Prescription(this.illness,this.bodyTemperature,this.bloodPressure,this.timeStamp,this.suggestedTest);
+  Prescription(this.illness,this.bodyTemperature,this.bloodPressure,this.timeStamp,this.suggestedTest,this.patientEmail);
 
 //  List view(){
 //    return [illness,bodyTemperature,bloodPressure,timeStamp,suggestedTest,medicines,reports];
@@ -44,6 +45,7 @@ class Prescription{
     bodyTemperature = snapshot['bloodPressure'];
     timeStamp = snapshot['timeStamp'];
     suggestedTest = snapshot['suggestedTest'];
+    patientEmail=snapshot.data['patientEmail'];
     var medicinesJson = snapshot['medicines'];
     var reportsJson = snapshot['reports'];
     if (medicinesJson != null) {
@@ -71,7 +73,8 @@ class Prescription{
       'timeStamp':timeStamp,
       'suggestedTest':suggestedTest,
       'medicines':medicines,
-      'reports':reports
+      'reports':reports,
+      'patientEmail':patientEmail
     };
   }
 

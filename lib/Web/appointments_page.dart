@@ -1,5 +1,9 @@
+import 'package:DocBook/Backend/appointments.dart';
+import 'package:DocBook/Backend/firestoreService.dart';
+import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:progress_indicators/progress_indicators.dart';
 
 import 'adaptive.dart';
 class AppointmentPage extends StatefulWidget {
@@ -11,10 +15,9 @@ class _AppointmentPageState extends State<AppointmentPage> {
 
   DateTime _dateTime = DateTime.now(); //date for which these inputs will be given
   /////////////////////////inputs///////////////////////////////////////////////////////////
-  var startTime = DateTime.parse("1969-07-20 09:00:04Z");
-  var endTime = DateTime.parse("1969-07-20 21:00:04Z");
-  var startTimeHour = 9;
-  var appoint = [9,9,12,15];
+  double startTimeHour = 9;
+  double endTimeHour = 20;
+  var appoint = [1,2,3,4];
   var hourList = [1,3,3,4];
   var userList = ['user1','user2','user3','user4'];
   var slotList = ["9:00 - 10:00","10:00 - 12:00","12:00 - 3:00","3:00 - 7:00"];
@@ -26,13 +29,46 @@ class _AppointmentPageState extends State<AppointmentPage> {
   ];
   ////////////////////////////////////////////////////////////////////////////////////////
 
+  String slotChooser(int dataTime){
+    switch(dataTime){
+      case 9: return "9:00 - 10:00";
+      case 10: return "10:00 - 11:00";
+      case 11: return "11:00 - 12:00";
+      case 12: return "12:00 - 13:00";
+      case 13: return "13:00 - 14:00";
+      case 14: return "14:00 - 15:00";
+      case 15: return "15:00 - 16:00";
+      case 16: return "16:00 - 17:00";
+      case 17: return "17:00 - 18:00";
+      case 18: return "18:00 - 19:00";
+      default: return "something went wrong";
+      // assumed no appointments after 18:00 - 19:00 slot
+    }
+  }
+
+
+  ///////////////Async Function /////////////////////////////////////////////
+
+  Future<void> _getData(String date) async{
+    List<Appointments> s = await new FirestoreService().appoitnmentPage(date);
+    appoint = new List();
+    hourList = new List();
+    userList = new List();
+    slotList = new List();
+    for(var e in s){
+      appoint.add(e.time);
+      hourList.add(1);
+      userList.add(e.patientEmail);
+      slotList.add(slotChooser(e.time));
+    }
+  }
+
+  /////////////////////////////////////////////////////////////////////////////////
+
   var list = [];
   Widget background(BuildContext context){
-    while(startTime.isBefore(endTime))
-    {
-      String time = "${startTime.hour}:${startTime.minute}";
-      list.add(time);
-      startTime = startTime.add(Duration(hours: 1));
+    for(int i = startTimeHour as int ; i < endTimeHour.toInt() ; i++ ) {
+      list.add(i.toString());
     }
     return Container(
       child: Column(children: <Widget>[
@@ -60,8 +96,8 @@ class _AppointmentPageState extends State<AppointmentPage> {
             onTap:(){
               showDatePicker(context: context,
                   initialDate: _dateTime == null ? DateTime.now() : _dateTime,
-                  firstDate: DateTime(2001),
-                  lastDate: DateTime(2021),
+                  firstDate: DateTime(2020),
+                  lastDate: DateTime(2030),
               ).then((date) {
                 setState(() {
                   if (date != null)
@@ -78,55 +114,70 @@ class _AppointmentPageState extends State<AppointmentPage> {
     final isDesktop = isDisplayDesktop(context);
     int elements = 4;
     double width =  (MediaQuery.of(context).size.width - 250)/elements;
-    var sumHour = [];
-    var tempSum = 0;
-
-    for(int i=0;i<elements;i++){
-      sumHour.add(tempSum);
-      tempSum = tempSum + hourList[i];
-    }
-
     return Container(
       color: Colors.white,
       child: !isDesktop ?
-         SingleChildScrollView(
-             child : Column(
-               mainAxisAlignment: MainAxisAlignment.center,
-               children: <Widget>[
-                 date(context),
-                 Timeline(
-                   children: <Widget>[
-                     for (int i=0;i<elements;i++) ...[
-                       _CardMobile(string:slotList[i],height: hourList[i].toDouble() * 50,),
-                     ]
-                   ],
-                   indicators: <Widget>[for (int i=0;i<elements;i++) ...[
-                     userAvatarList[i],
-                   ]
-                   ],
-                 )
-               ],
-             )
-         )
+      SingleChildScrollView(
+          child : Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              date(context),
+              FutureBuilder(
+              future: _getData(formatDate(_dateTime, [yyyy,'-',mm,'-',dd])),
+                  builder:(BuildContext context,snapshot) {
+                    if(snapshot.connectionState==ConnectionState.done) {
+                      return Timeline(
+                        children: <Widget>[
+                          for (int i = 0; i < elements; i++) ...[
+                            _CardMobile(string: slotList[i],
+                              height: hourList[i].toDouble() * 50,),
+                          ]
+                        ],
+                        indicators: <Widget>[
+                          for (int i = 0; i < elements; i++) ...[
+                            userAvatarList[i],
+                          ]
+                        ],
+                      );
+                    }
+                    else{
+                      return JumpingDotsProgressIndicator(fontSize: 60.0,);
+                    }
+                  }
+              )
+            ],
+          )
+      )
           : Container(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             date(context),
-            Expanded(
-              child: SingleChildScrollView(
-                  child : Stack(children: <Widget>[
-                    background(context),
-                    for(int i= 0 ; i < elements ;i++) ...[
-                      _TopDesktop(string: userList[i],
-                        top: 33 + 65 * (appoint[i].toDouble() - startTimeHour),
-                        left: 80 + width * i,
-                        elements: elements,
-                        hours: hourList[i].toDouble(),)
-                    ],
-                  ],
-                  )
-              ),
+            FutureBuilder(
+                future: _getData(formatDate(_dateTime, [yyyy,'-',mm,'-',dd])),
+                builder:(BuildContext context,snapshot) {
+                  if(snapshot.connectionState==ConnectionState.done) {
+                    return Expanded(
+                      child: SingleChildScrollView(
+                          child: Stack(children: <Widget>[
+                            background(context),
+                            for(int i = 0; i < elements; i++) ...[
+                              _TopDesktop(string: userList[i],
+                                top: 33 + 65 * (appoint[i].toDouble() -
+                                    startTimeHour),
+                                left: 80 + width * i,
+                                elements: elements,
+                                hours: hourList[i].toDouble(),)
+                            ],
+                          ],
+                          )
+                      ),
+                    );
+                  }
+                  else{
+                    return JumpingDotsProgressIndicator(fontSize: 60.0,);
+                  }
+                }
             )
           ],
         ),

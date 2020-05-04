@@ -18,6 +18,25 @@ class FirestoreService{
       return e.toString();
     }
   }
+
+  Future appoitnmentPage(String date) async {
+    try{
+      final CollectionReference _objReference = Firestore.instance.collection('Appointments');
+      var documentLists = await _objReference.getDocuments();
+      if (documentLists.documents.isNotEmpty) {
+        return documentLists.documents
+            .map((e) => Appointments.fromSnapshot(e))
+            .where((element) => element.date==date)
+            .toList();
+      }
+    }
+    catch (e){
+      if(e is PlatformException){
+        return e.message;
+      }
+      return e.toString();
+    }
+  }
   Future readData(String type) async {
     try{
       final CollectionReference _objReference = Firestore.instance.collection(type);
@@ -33,7 +52,7 @@ class FirestoreService{
               .map((e) => Prescription.fromSnapshot(e))
               .toList();
         }
-        else if (type == 'Appointments') {
+         if (type == 'Appointments') {
           return documentLists.documents
               .map((e) => Appointments.fromSnapshot(e))
               .toList();

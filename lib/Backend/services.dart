@@ -65,8 +65,8 @@ class Services {
     }
   }
 
-  addPrescription(String illness,double bodyTemperature,double bloodPressure,String suggestedTest){
-    _prescription=new Prescription(illness, bodyTemperature, bloodPressure, formatDate(new DateTime.now(), [yyyy,'-',mm,'-',dd,',',hh,':',nn,':',ss]), suggestedTest);
+  addPrescription(String illness,double bodyTemperature,double bloodPressure,String suggestedTest, String email){
+    _prescription=new Prescription(illness, bodyTemperature, bloodPressure, formatDate(new DateTime.now(), [yyyy,'-',mm,'-',dd,',',hh,':',nn,':',ss]), suggestedTest,email);
   }
 
   addMedicine(String name,String strength,double amount,bool day,bool afternoon,bool night,int timePeriod){
@@ -82,8 +82,8 @@ class Services {
     _prescription=new Prescription.fromSnapshot(snapshot);
   }
 
-  addInquiry(String subject,String timeStamp,int priority,String description) async{
-    _inquiry=new Inquiry(subject, timeStamp, priority, description);
+  addInquiry(String subject,String timeStamp,int priority,String description,String email) async{
+    _inquiry=new Inquiry(subject, timeStamp, priority, description,email);
     var s= new FirestoreService().addData(_inquiry, 'Inquiry');
     if(s is String){
       await new DialogService().showDialog(
@@ -98,8 +98,8 @@ class Services {
       );
     }
   }
-  addAppointments(String sicknessDescription,String bookTime,String date,int time,)async{
-    _appointments=new Appointments(sicknessDescription, date, time, bookTime);
+  addAppointments(String sicknessDescription,String bookTime,String date,int time,String email)async{
+    _appointments=new Appointments(sicknessDescription, date, time, bookTime,email);
     var s= new FirestoreService().addData(_appointments, 'Appointments');
     if(s is String){
       await new DialogService().showDialog(

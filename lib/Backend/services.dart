@@ -29,11 +29,11 @@ class Services {
     }
   }
 
-  Future addPatient(String registerID,String name,String address,String phone,String email,String sex,String dob,String bloodGroup,String imageURL) async{
+  Future addPatient(String name,String address,String phone,String email,String sex,String dob,String bloodGroup,String imageURL) async{
     if(imageURL==null||imageURL.isEmpty){
       imageURL='image';
     }
-    _patient=new Patient(registerID, name, address, phone, email, sex, dob, bloodGroup);
+    _patient=new Patient(name, address, phone, email, sex, dob, bloodGroup);
     var s=new FirestoreService().addData(_patient, 'Patient');
     if(s is String){
       await new DialogService().showDialog(

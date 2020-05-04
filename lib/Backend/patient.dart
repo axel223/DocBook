@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Patient{
-  String registerID;
   String name;
   String address;
   String phone;
@@ -12,7 +11,7 @@ class Patient{
   String imageURL;
   DocumentReference patientReference;
 
-  Patient(this.registerID,this.name,this.address,this.phone,this.email,this.sex,this.dob,this.bloodGroup);
+  Patient(this.name,this.address,this.phone,this.email,this.sex,this.dob,this.bloodGroup);
 
 //  List view(){
 //    return [registerId,name,address,phone,email,sex,dob,bloodGroup];

@@ -19,13 +19,13 @@ void main(){
   test('description', ()  {
     TestWidgetsFlutterBinding.ensureInitialized();
     print(formatDate(new DateTime.now(), [yyyy,'-',mm,'-',dd,',',hh,':',nn,':',ss]));
-    Patient P = new Patient('registerID', 'avneesh', 'address', 'phone', 'email', 'sex', '28-05-2001', 'bloodGroup');
+    Patient P = new Patient( 'avneesh', 'address', 'phone', 'email', 'sex', '28-05-2001', 'bloodGroup');
     print(jsonEncode(P));
-    P = new Patient('registerID', 'aditya', 'address', 'phone', 'email', 'sex', '28-05-2001', 'bloodGroup');
+    P = new Patient('aditya', 'address', 'phone', 'email', 'sex', '28-05-2001', 'bloodGroup');
     print(jsonEncode(P));
-    P = new Patient('registerID', 'atif', 'address', 'phone', 'email', 'sex', '28-05-2001', 'bloodGroup');
+    P = new Patient('atif', 'address', 'phone', 'email', 'sex', '28-05-2001', 'bloodGroup');
     print(jsonEncode(P));
-    P = new Patient('registerID', 'avinash', 'address', 'phone', 'email', 'sex', '28-05-2001', 'bloodGroup');
+    P = new Patient('avinash', 'address', 'phone', 'email', 'sex', '28-05-2001', 'bloodGroup');
     print(jsonEncode(P));
 
   });

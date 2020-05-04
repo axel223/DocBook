@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'adaptive.dart';
+import 'package:DocBook/Backend/patient.dart';
 
 
 class PatientUI extends StatelessWidget {
+  Patient patientId;
   PatientUI(this.patientId);
-  final String patientId;
 
   Future<String> _asyncInputDialog(BuildContext context) async {
     String teamName = '';

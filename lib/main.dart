@@ -13,8 +13,8 @@ void main() => runApp(const DocBook());
 class DocBook extends StatelessWidget {
   const DocBook();
 
-  static const String loginRoute = '/login';
-  static const String homeRoute = '/';
+  static const String loginRoute = '/';
+  static const String homeRoute = '/home';
 
   @override
   Widget build(BuildContext context) {

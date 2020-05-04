@@ -10,7 +10,6 @@ import 'adaptive.dart';
 import 'image_placeholder.dart';
 import 'text_scale.dart';
 import 'colours.dart';
-import 'alert.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage();
@@ -45,9 +44,39 @@ class _LoginPageState extends State<LoginPage> {
     super.dispose();
   }
 }
-
+Future<void> _ackAlert(BuildContext context , String title,String text,String buttonText) {
+  return showDialog<void>(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text(
+            title,
+            style: GoogleFonts.poppins(
+              color: title == "Error" ? Colors.red : DocBookColors.buttonColor,
+              fontSize: 20,
+              fontWeight: FontWeight.w600,
+            )
+        ),
+        content: Text(
+            text,
+            style: GoogleFonts.poppins(
+                color: DocBookColors.buttonColor,
+                fontSize: 15
+            )
+        ),
+        actions: <Widget>[
+          FlatButton(
+            child: Text(buttonText),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      );
+    },
+  );
+}
 class _MainView extends StatelessWidget {
-  bool _loginKey=false;
    _MainView({
     Key key,
     this.usernameController,
@@ -57,38 +86,7 @@ class _MainView extends StatelessWidget {
   final TextEditingController usernameController;
   final TextEditingController passwordController;
 
-  Future<void> _ackAlert(BuildContext context , String title,String text,String buttonText) {
-    return showDialog<void>(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(
-              title,
-              style: GoogleFonts.poppins(
-                  color: title == "Error" ? Colors.red : DocBookColors.buttonColor,
-                  fontSize: 20,
-                  fontWeight: FontWeight.w600,
-              )
-          ),
-          content: Text(
-              text,
-              style: GoogleFonts.poppins(
-                  color: DocBookColors.buttonColor,
-                  fontSize: 15
-              )
-          ),
-          actions: <Widget>[
-            FlatButton(
-              child: Text(buttonText),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
+
   Future _handlesignIn(String email, String pass) async {
     try {
       final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -388,6 +386,68 @@ class _TapText extends StatelessWidget {
 
   final String text;
 
+  Future _resetPassword(String email) async{
+    try{
+      final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+      await _firebaseAuth.sendPasswordResetEmail(email: email);
+      return true;
+    }
+    catch(e){
+      return e.toString();
+    }
+  }
+
+  Future _forgetPassword(BuildContext context,String email) async{
+    var s = await _resetPassword(email);
+    if(s is String){
+      _ackAlert(context, "Firebase Error", s, 'OK');
+    }
+    else{
+      _ackAlert(context, "Notification", 'Password Link has been sent successfully to your email address', 'OK');
+    }
+  }
+
+  Future<String> _asyncInputDialog(BuildContext context) async {
+    String teamName = '';
+    return showDialog<String>(
+      context: context,
+//      barrierDismissible: false, // dialog is dismissible with a tap on the barrier
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Enter Email Address',style: GoogleFonts.poppins(color: Colors.black),),
+          content: Row(
+            children: <Widget>[
+              Expanded(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    TextField(
+                      style: TextStyle(color: Colors.black),
+                      autofocus: true,
+                      decoration: new InputDecoration(
+                          labelText: 'Email Address', hintText: 'abc@gmail.com'),
+                      onChanged: (value) {
+                        teamName = value;
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('Ok'),
+              onPressed: () {
+                Navigator.of(context).pop(teamName);               ///////////////////////add prescription function///////////
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return InkWell(
@@ -399,11 +459,13 @@ class _TapText extends StatelessWidget {
           color: Colors.black,
           ),
       ),
-      onTap: () {
+      onTap: () async{
         if(text == "How to Use")
           print("1");
-        else
-          print("2");
+        else if(text == 'Forgot Password?') {
+          String mail = await _asyncInputDialog(context);
+          _forgetPassword(context, mail);
+          }
         },
     );
   }

@@ -49,7 +49,7 @@ class _PatientViewState extends State<PatientView> {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => PatientUI(P.email))
+                    builder: (context) => PatientUI(P))
             );
           },
           title: Text(P.name, style: GoogleFonts.poppins(

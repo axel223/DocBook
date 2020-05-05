@@ -8,7 +8,7 @@ import 'package:flutter/services.dart';
 
 class FirestoreService{
 
-  Future addData(obj,type) async {
+  Future addData(obj,String type) async {
     try{
       final CollectionReference _objReference = Firestore.instance.collection(type);
       await _objReference.add(obj.toJson());

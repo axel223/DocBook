@@ -1,88 +1,133 @@
-import 'package:DocBook/Backend/patient.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:DocBook/App/Home.dart';
+import 'package:DocBook/App/chats.dart';
+import 'package:DocBook/App/resetPassword.dart';
+import 'package:DocBook/App/signup.dart';
 
-void main() => runApp(MyApp());
+void main() => runApp(
+  MaterialApp(
+    title: 'DocBook',
+    debugShowCheckedModeBanner: false,
+    home: LoginPage(),
+    theme: new ThemeData(
+      primarySwatch: Colors.green,
+    ),
+  ),
+);
 
-class MyApp extends StatelessWidget {
+class LoginPage extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Baby Names',
-      home: MyHomePage(),
-    );
-  }
+  static String tag = 'login-page';
+
+  _LoginPageState createState() => _LoginPageState();
 }
 
-class MyHomePage extends StatefulWidget {
-  @override
-  _MyHomePageState createState() {
-    return _MyHomePageState();
-  }
-}
-
-class _MyHomePageState extends State<MyHomePage> {
+class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
+
+    bool isKeyboardOpen = MediaQuery.of(context).viewInsets.bottom != 0;
+    final width = MediaQuery.of(context).size.width;
+    final TextEditingController _user = TextEditingController();
+    final TextEditingController _pass = TextEditingController();
     return Scaffold(
-      appBar: AppBar(title: Text('Baby Name Votes')),
-      body: _buildBody(context),
+        backgroundColor: Colors.white,
+        body: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Stack(
+                overflow: Overflow.visible,
+                children: <Widget>[
+                  Positioned(
+                      top: isKeyboardOpen ? -350 : -170,
+                      left: -70,
+                      child:Container(
+                        height: 500,
+                        width: 500,
+                        decoration: BoxDecoration(
+                          color: Color(0xff31A05E),
+                          shape: BoxShape.circle,
+                        ),
+                      )),
+                  Container(
+                    margin: EdgeInsets.only(top: isKeyboardOpen ? 15 : 125),
+                    alignment: Alignment.center,
+                    child: Image.asset("assets/images/Logo.png"),
+                  ),
+                ],
+              ),
+              Expanded(child: SizedBox()),
+              Container(
+                width: width - 50,
+                margin: EdgeInsets.symmetric(horizontal: 25),
+                alignment: Alignment.center,
+                child: Column(
+                  children: <Widget>[
+                    ListTile(
+                      title: TextField(
+                        controller: _user,
+                        decoration: InputDecoration(
+                            labelText: ' Username'),
+                      ),
+                    ),
+                    ListTile(
+                      title: TextField(
+                        controller: _pass,
+                        decoration: InputDecoration(
+                            labelText: ' Password'),
+                        obscureText: true,
+                      ),
+                    ),
+                    Container(
+                      height: 50,
+                      width: 200,
+                      margin: EdgeInsets.fromLTRB(10, 20, 10, 15),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(50),
+                        color: Color(0xff31A05E),
+                      ),
+                      child: FlatButton(
+                        child: Center(
+                          child : Text(
+                            "SIGN IN",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 18.0,
+                              fontFamily: "Montserrat",
+                            ),
+                          ),
+                        ),
+                        onPressed: () => Navigator.push(context, MaterialPageRoute(
+                            builder: (_) => HomePage()
+                        )),
+                      ),
+                    ),
+                    InkWell(
+                      child: Text(
+                        'New User?',
+                        style: TextStyle(fontSize: 12 ,color: Colors.grey),
+                      ),
+                      onTap: () {
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => BeginSignup()));
+                      },
+                    ),
+                    SizedBox(height: 20,),
+                    InkWell(
+                      child: Text(
+                        'Forgot Password?',
+                        style: TextStyle(fontSize: 12,color: Colors.grey),
+                      ),
+                      onTap: () {
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => BeginReset()));
+                      },
+                    ),
+                    SizedBox(height: 20,),
+                  ],
+                ),
+              )
+            ]
+        )
     );
   }
-
-  Widget _buildBody(BuildContext context) {
-    return StreamBuilder<QuerySnapshot>(
-      stream: Firestore.instance.collection('Patient').snapshots(),
-      builder: (context, snapshot) {
-        if (!snapshot.hasData) return LinearProgressIndicator();
-
-        return _buildList(context, snapshot.data.documents);
-      },
-    );
-  }
-
-  Widget _buildList(BuildContext context, List<DocumentSnapshot> snapshot) {
-    return ListView(
-      padding: const EdgeInsets.only(top: 20.0),
-      children: snapshot.map((data) => _buildListItem(context, data)).toList(),
-    );
-  }
-
-  Widget _buildListItem(BuildContext context, DocumentSnapshot data) {
-    final record = Patient.fromSnapshot(data);
-
-    return Padding(
-      key: ValueKey(record.name),
-      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-      child: Container(
-        decoration: BoxDecoration(
-          border: Border.all(color: Colors.grey),
-          borderRadius: BorderRadius.circular(5.0),
-        ),
-        child: ListTile(
-          title: Text(record.name),
-          trailing: Text(record.email),
-        ),
-//          onTap: () => record.patientReference.updateData({'votes': FieldValue.increment(1)}),       ),
-      ),
-    );
-  }
-}
-
-class Record {
-  final String name;
-  final int votes;
-  final DocumentReference reference;
-
-  Record.fromMap(Map<String, dynamic> map, {this.reference})
-      : assert(map['name'] != null),
-        assert(map['votes'] != null),
-        name = map['name'],
-        votes = map['votes'];
-
-  Record.fromSnapshot(DocumentSnapshot snapshot)
-      : this.fromMap(snapshot.data, reference: snapshot.reference);
-
-  @override
-  String toString() => "Record<$name:$votes>";
 }

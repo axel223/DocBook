@@ -37,6 +37,26 @@ class FirestoreService{
       return e.toString();
     }
   }
+
+  Future prescriptionPage(String user) async {
+    try{
+      final CollectionReference _objReference = Firestore.instance.collection('Prescription');
+      var documentLists = await _objReference.getDocuments();
+      if (documentLists.documents.isNotEmpty) {
+        return documentLists.documents
+            .map((e) => Prescription.fromSnapshot(e))
+            .where((element) => element.patientEmail==user)
+            .toList();
+      }
+    }
+    catch (e){
+      if(e is PlatformException){
+        return e.message;
+      }
+      return e.toString();
+    }
+  }
+
   Future readData(String type) async {
     try{
       final CollectionReference _objReference = Firestore.instance.collection(type);

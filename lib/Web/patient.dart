@@ -1,12 +1,26 @@
+import 'package:DocBook/Backend/firestoreService.dart';
+import 'package:DocBook/Backend/prescription.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:progress_indicators/progress_indicators.dart';
 import 'adaptive.dart';
 import 'package:DocBook/Backend/patient.dart';
 
-
-class PatientUI extends StatelessWidget {
-  Patient patientId;
+class PatientUI extends StatefulWidget {
+ final Patient patientId;
   PatientUI(this.patientId);
+  @override
+  PatientUIstate createState() => PatientUIstate(patientId);
+
+}
+class PatientUIstate extends State<PatientUI> {
+  List<String> illness;
+  List<String> dateTime;
+  List<String> tests;
+  List<double> bodyTemp;
+  Patient patientId;
+  PatientUIstate(this.patientId);
 
   Future<String> _asyncInputDialog(BuildContext context) async {
     String teamName = '';
@@ -54,6 +68,20 @@ class PatientUI extends StatelessWidget {
         );
       },
     );
+  }
+
+  Future<void> _getData(String email) async{
+    List<Prescription> s = await new FirestoreService().prescriptionPage(email);
+    bodyTemp = new List();
+    illness = new List();
+    dateTime = new List();
+    tests = new List();
+    for(var e in s){
+      bodyTemp.add(e.bodyTemperature);
+      illness.add(e.illness);
+      dateTime.add(e.timeStamp);
+      tests.add(e.suggestedTest);
+    }
   }
 
   @override
@@ -157,74 +185,88 @@ class PatientUI extends StatelessWidget {
             ),
           ) : SizedBox(height: 0,),
           Expanded(
-              child :ListView(
-                padding: const EdgeInsets.symmetric(vertical: 10,horizontal: 20),
-                children: <Widget>[
-                  for (int index = 1; index < 21; index++)
-                    ListTile(
-                      leading: ExcludeSemantics(
-                        child: CircleAvatar(radius:30, child: Text('$index')),
-                      ),
-                      onTap:(){
-                        print(index);
-                      },
-                      title: Text( "list [index].",style: GoogleFonts.poppins(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.black,
-                      )),
-                      subtitle: !isDesktop ? Text( "date",style: GoogleFonts.poppins(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.black,
-                      )) : null,
-                      trailing: isDesktop ? Wrap(
-                        spacing: 12, // space between two icons
-                        children: <Widget>[
-                          SizedBox(width: 50,),
-                          Container(
-                            width : 150,
-                            alignment: Alignment.center,
-                            child: Text(
-                                "diagnosis",
-                                style: GoogleFonts.poppins(
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.w500,
-                                  color: Colors.black,
-                                )
+              child :FutureBuilder(
+                future: _getData(patientId.email),
+                builder: (BuildContext context,snapshot) {
+                  if(snapshot.connectionState==ConnectionState.done) {
+                    return ListView(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 10, horizontal: 20),
+                      children: <Widget>[
+                        for (int index = 1; index < illness.length; index++)
+                          ListTile(
+                            leading: ExcludeSemantics(
+                              child: CircleAvatar(radius: 30, child: Text(
+                                  '$index')),
                             ),
+                            onTap: () {
+                              print(index);
+                            },
+                            title: Text(
+                                illness[index], style: GoogleFonts.poppins(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.black,
+                            )),
+                            subtitle: !isDesktop ? Text(
+                                "date", style: GoogleFonts.poppins(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.black,
+                            )) : null,
+                            trailing: isDesktop ? Wrap(
+                              spacing: 12, // space between two icons
+                              children: <Widget>[
+                                SizedBox(width: 50,),
+                                Container(
+                                  width: 150,
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                      dateTime[index],
+                                      style: GoogleFonts.poppins(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w500,
+                                        color: Colors.black,
+                                      )
+                                  ),
+                                ),
+                                SizedBox(width: 80,),
+                                Container(
+                                  width: 170,
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                      tests[index],
+                                      style: GoogleFonts.poppins(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w500,
+                                        color: Colors.black,
+                                      )
+                                  ),
+                                ),
+                                SizedBox(width: 90,),
+                                Container(
+                                  width: 130,
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                      bodyTemp[index].toString(),
+                                      style: GoogleFonts.poppins(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w500,
+                                        color: Colors.black,
+                                      )
+                                  ),
+                                ),
+                                SizedBox(width: 80,)
+                              ],
+                            ) : null,
                           ),
-                          SizedBox(width: 80,),
-                          Container(
-                            width : 170,
-                            alignment: Alignment.center,
-                            child: Text(
-                                "date",
-                                style: GoogleFonts.poppins(
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.w500,
-                                  color: Colors.black,
-                                )
-                            ),
-                          ),
-                          SizedBox(width: 90,),
-                          Container(
-                            width : 130,
-                            alignment: Alignment.center,
-                            child: Text(
-                                "diagnosis",
-                                style: GoogleFonts.poppins(
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.w500,
-                                  color: Colors.black,
-                                )
-                            ),
-                          ),
-                          SizedBox(width: 80,)
-                        ],
-                      ) : null,
-                    ),
-                ],
+                      ],
+                    );
+                  }
+                  else{
+                    return JumpingDotsProgressIndicator(fontSize: 60.0,);
+                  }
+                }
               )
           ),
         ],

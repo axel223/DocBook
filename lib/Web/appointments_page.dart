@@ -55,11 +55,13 @@ class _AppointmentPageState extends State<AppointmentPage> {
     hourList = new List();
     userList = new List();
     slotList = new List();
+    userAvatarList = new List();
     for(var e in s){
       appoint.add(e.time);
       hourList.add(1);
       userList.add(e.patientEmail);
       slotList.add(slotChooser(e.time));
+      userAvatarList.add(Icon(Icons.person));
     }
   }
 
@@ -102,6 +104,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
                 setState(() {
                   if (date != null)
                     _dateTime = date;
+                  build(context);
                 });
               });
             },
@@ -112,7 +115,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
   @override
   Widget build(BuildContext context) {
     final isDesktop = isDisplayDesktop(context);
-    int elements = 4;
+    int elements = 10;
     double width =  (MediaQuery.of(context).size.width - 250)/elements;
     return Container(
       color: Colors.white,
@@ -128,13 +131,13 @@ class _AppointmentPageState extends State<AppointmentPage> {
                     if(snapshot.connectionState==ConnectionState.done) {
                       return Timeline(
                         children: <Widget>[
-                          for (int i = 0; i < elements; i++) ...[
+                          for (int i = 0; i < hourList.length; i++) ...[
                             _CardMobile(string: slotList[i],
                               height: hourList[i].toDouble() * 50,),
                           ]
                         ],
                         indicators: <Widget>[
-                          for (int i = 0; i < elements; i++) ...[
+                          for (int i = 0; i < userAvatarList.length; i++) ...[
                             userAvatarList[i],
                           ]
                         ],
@@ -161,7 +164,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
                       child: SingleChildScrollView(
                           child: Stack(children: <Widget>[
                             background(context),
-                            for(int i = 0; i < elements; i++) ...[
+                            for(int i = 0; i < userAvatarList.length; i++) ...[
                               _TopDesktop(string: userList[i],
                                 top: 33 + 65 * (appoint[i].toDouble() -
                                     startTimeHour),

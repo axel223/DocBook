@@ -5,7 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../main.dart';
+import 'main.dart';
 import 'adaptive.dart';
 import 'image_placeholder.dart';
 import 'text_scale.dart';

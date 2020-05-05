@@ -91,7 +91,7 @@ class PatientUIstate extends State<PatientUI> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text(
-          "Patient Name",
+          "Diagnosis",
           style: TextStyle(
               fontSize: 20.0,
               fontWeight: FontWeight.bold
@@ -126,7 +126,7 @@ class PatientUIstate extends State<PatientUI> {
                     width: 150.0,
                     alignment: Alignment.center,
                     child: Text(
-                      "Diagnosis",
+                      "DateVisited",
                       style: GoogleFonts.poppins(
                         color: Color(0xFF010E74),
                         fontSize: 17,
@@ -144,7 +144,7 @@ class PatientUIstate extends State<PatientUI> {
                     width: 150.0,
                     alignment: Alignment.center,
                     child: Text(
-                      "Date Visited",
+                      "Suggested Tests",
                       style: GoogleFonts.poppins(
                         color: Color(0xFF010E74),
                         fontSize: 17,
@@ -172,7 +172,7 @@ class PatientUIstate extends State<PatientUI> {
                     width: 130.0,
                     alignment: Alignment.center,
                     child: Text(
-                      "Actions",
+                      "Body Temperature",
                       style: GoogleFonts.poppins(
                         color: Color(0xFF010E74),
                         fontSize: 17,

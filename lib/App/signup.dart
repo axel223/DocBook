@@ -1,7 +1,6 @@
 import 'package:DocBook/Backend/firestoreService.dart';
 import 'package:DocBook/Backend/patient.dart';
 import 'package:DocBook/Web/colours.dart';
-import 'package:DocBook/main.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -353,7 +352,7 @@ class Signup extends State<BeginSignup> {
     );
   }
   ////////////////////////////////FIREBASE////////////////////////////////////////////
-  Future<void> _ackAlert(BuildContext context , String title,String text,String buttonText) {
+  Future<void> ackAlert(BuildContext context , String title,String text,String buttonText) {
     return showDialog<void>(
       context: context,
       builder: (BuildContext context) {
@@ -394,12 +393,12 @@ class Signup extends State<BeginSignup> {
       if (_user != null) {
         var s= await new FirestoreService().addData(new Patient(_name, _address, _phone, _email, _sex, _dob, _bgroup), 'Patient');
         if(s is String){
-          _ackAlert(context, 'Error Occurred', s, 'OK');
+          ackAlert(context, 'Error Occurred', s, 'OK');
           FirebaseAuth.instance.signOut();
           return true;
         }
         await _user.sendEmailVerification();
-        _ackAlert(context, 'Registered Successfully', 'Email verification Link has been sent', 'OK');
+        ackAlert(context, 'Registered Successfully', 'Email verification Link has been sent', 'OK');
         FirebaseAuth.instance.signOut();
         return true;
       }
@@ -422,10 +421,10 @@ class Signup extends State<BeginSignup> {
     var s=await _handlesignUP();
 
     if(s is String){
-      _ackAlert(context, "Firebase Error", s, "OK");
+      ackAlert(context, "Firebase Error", s, "OK");
     }
     else if(s==false){
-      _ackAlert(context, 'Error Occurred', 'Unknown Error', 'OK');
+      ackAlert(context, 'Error Occurred', 'Unknown Error', 'OK');
     }
   }
 

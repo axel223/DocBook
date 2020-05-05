@@ -1,8 +1,11 @@
+import 'package:DocBook/Web/colours.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:DocBook/App/Home.dart';
 import 'package:DocBook/App/chats.dart';
 import 'package:DocBook/App/resetPassword.dart';
 import 'package:DocBook/App/signup.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 void main() => runApp(
   MaterialApp(
@@ -23,13 +26,14 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+
+  final TextEditingController _user = TextEditingController();
+  final TextEditingController _pass = TextEditingController();
   @override
   Widget build(BuildContext context) {
 
     bool isKeyboardOpen = MediaQuery.of(context).viewInsets.bottom != 0;
     final width = MediaQuery.of(context).size.width;
-    final TextEditingController _user = TextEditingController();
-    final TextEditingController _pass = TextEditingController();
     return Scaffold(
         backgroundColor: Colors.white,
         body: Column(
@@ -98,9 +102,7 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                           ),
                         ),
-                        onPressed: () => Navigator.push(context, MaterialPageRoute(
-                            builder: (_) => HomePage()
-                        )),
+                        onPressed: () => _login(context),
                       ),
                     ),
                     InkWell(
@@ -128,6 +130,84 @@ class _LoginPageState extends State<LoginPage> {
               )
             ]
         )
+    );
+  }
+  Future _handlesignIn(String email, String pass) async {
+    try {
+      final FirebaseAuth _auth = FirebaseAuth.instance;
+      final FirebaseUser user = (await _auth.signInWithEmailAndPassword(
+          email: email, password: pass)).user;
+      if (user != null) {
+        return user;
+      }
+      else {
+        return false;
+      }
+    }
+    catch(e){
+      return e.toString();
+    }
+  }
+
+
+  Future _login(BuildContext context) async {
+    /////////////////////////Firebase Function/////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+    var s=await _handlesignIn(_user.text, _pass.text);
+
+    if(s is String){
+      _ackAlert(context, "Firebase Error", s, "OK");
+    }
+    else if(s==false) {
+      _ackAlert(context, "Error", "Wrong Username or Password", "OK");
+    }
+    else {
+      FirebaseUser _t = s;
+      if(_t.isEmailVerified) {
+        Navigator.push(context, MaterialPageRoute(
+            builder: (_) => HomePage()
+
+        ));
+      }
+      else{
+        _ackAlert(context, "Error", "Please Verify Yourself", "OK");
+        FirebaseAuth.instance.signOut();
+      }
+    }
+
+
+  }
+  Future<void> _ackAlert(BuildContext context , String title,String text,String buttonText) {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(
+              title,
+              style: GoogleFonts.poppins(
+                color: title == "Error" ? Colors.red : DocBookColors.buttonColor,
+                fontSize: 20,
+                fontWeight: FontWeight.w600,
+              )
+          ),
+          content: Text(
+              text,
+              style: GoogleFonts.poppins(
+                  color: DocBookColors.buttonColor,
+                  fontSize: 15
+              )
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: Text(buttonText),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }

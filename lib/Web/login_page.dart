@@ -44,7 +44,7 @@ class _LoginPageState extends State<LoginPage> {
     super.dispose();
   }
 }
-Future<void> _ackAlert(BuildContext context , String title,String text,String buttonText) {
+Future<void> ackAlert(BuildContext context , String title,String text,String buttonText) {
   return showDialog<void>(
     context: context,
     builder: (BuildContext context) {
@@ -93,7 +93,7 @@ class _MainView extends StatelessWidget {
       final FirebaseUser user = (await _auth.signInWithEmailAndPassword(
           email: email, password: pass)).user;
       if (user != null) {
-        return true;
+        return user;
       }
       else {
         return false;
@@ -116,14 +116,22 @@ class _MainView extends StatelessWidget {
     var s=await _handlesignIn(usernameController.text, passwordController.text);
 
     if(s is String){
-      _ackAlert(context, "Firebase Error", s, "OK");
+      ackAlert(context, "Firebase Error", s, "OK");
     }
-    else if(s==true) {
-      Navigator.of(context).pushNamed(DocBook.homeRoute);
+    else if(s==false) {
+      ackAlert(context, "Error", "Wrong Username or Password", "OK");
     }
     else {
-      _ackAlert(context, "Error", "Wrong Username or Password", "OK");
+      FirebaseUser _t=s;
+      if(_t.isEmailVerified) {
+        Navigator.of(context).pushNamed(DocBook.homeRoute);
+      }
+      else{
+        ackAlert(context, "Error", "Please verify yourself", "OK");
+        FirebaseAuth.instance.signOut();
+      }
     }
+
 
   }
 
@@ -400,10 +408,10 @@ class _TapText extends StatelessWidget {
   Future _forgetPassword(BuildContext context,String email) async{
     var s = await _resetPassword(email);
     if(s is String){
-      _ackAlert(context, "Firebase Error", s, 'OK');
+      ackAlert(context, "Firebase Error", s, 'OK');
     }
     else{
-      _ackAlert(context, "Notification", 'Password Link has been sent successfully to your email address', 'OK');
+      ackAlert(context, "Notification", 'Password Link has been sent successfully to your email address', 'OK');
     }
   }
 
